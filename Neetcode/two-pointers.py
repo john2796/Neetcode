@@ -82,3 +82,32 @@ class Solution:
                     while nums[j] == nums[j - 1] and j < k:
                         j += 1  # also moved j if dups
         return res
+
+
+""" https://leetcode.com/problems/container-with-most-water/
+Return the maximum amount of water a container can store.
+area = (r-l) * min(r, l)
+
+  0. 1  2  3. 4. 5  6. 7. 8
+     l
+[ 1, 8, 6, 2, 5, 4, 8, 3, 7 ]
+                          r
+max_area=8
+a = (8-0) * min(1,7)  - 8*1 = 8
+a = (8-1) * min(7,8)  - 7*7=49
+                
+"""
+
+
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        l, r = 0, len(height) - 1
+        max_area = 0
+        while l < r:
+            current_area = min(height[l], height[r]) * (r - l)
+            max_area = max(max_area, current_area)
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return max_area
