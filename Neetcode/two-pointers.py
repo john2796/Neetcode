@@ -111,3 +111,54 @@ class Solution:
             else:
                 r -= 1
         return max_area
+
+
+"""https://leetcode.com/problems/trapping-rain-water/
+compute how much water it can trap after raining
+ - set 2 pointers left_max and right_max
+ - check which side is greater
+ - if one side is greater 
+ - iterate on other side because at the min side the water will be filled at its limit
+ - iterate till pointer is lower than the other one.
+ - amount of water is calculate: wall_length - min(right_max, left_max)
+
+                      l
+[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]
+                               r
+left_max=0, right_max=1, count=0
+
+iterate left side.
+count=0, left_max=0, right_max=1
+count=0, left_max=1, right_max=1
+count=1, left_max=1, right_max=1
+count=2, left_max=2, right_max=1
+
+iterate right side.
+count=2, left_max=2, right_max=2
+
+iterate left side.
+count=3, left_max=2, right_max=2
+count=5, left_max=2, right_max=2
+count=5, left_max=3, right_max=2
+count=6, left_max=3, right_max=2
+"""
+
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        i = 0
+        left_max = height[0]
+        sum = 0
+        j = len(height) - 1
+        right_max = height[j]
+
+        while i < j:
+            if left_max <= right_max:
+                sum += left_max - height[i]
+                i += 1
+                left_max = max(left_max, height[i])
+            else:
+                sum += right_max - height[j]
+                j -= 1
+                right_max = max(right_max, height[j])
+        return sum
