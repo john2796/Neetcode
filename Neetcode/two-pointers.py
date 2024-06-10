@@ -50,3 +50,35 @@ class Solution:
                 l += 1
             else:
                 r -= 1
+
+
+""" https://leetcode.com/problems/3sum/description/
+  i
+[-1, 0, 1, 2, -1, -4]
+     j.            k
+-1+0+1=
+"""
+
+
+class Solution:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        res = []
+        for i in range(len(nums) - 1):
+            if i > 0 and nums[i] == nums[i - 1]:  # skip dups i
+                continue
+            j = i + 1
+            k = len(nums) - 1
+            while j < k:
+                total = nums[i] + nums[j] + nums[k]
+                if total > 0:
+                    k -= 1
+                elif total < 0:
+                    j += 1
+                else:
+                    res.append([nums[i], nums[j], nums[k]])
+                    j += 1  # move left pointer 1over
+
+                    while nums[j] == nums[j - 1] and j < k:
+                        j += 1  # also moved j if dups
+        return res
