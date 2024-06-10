@@ -27,3 +27,26 @@ class Solution:
             else:
                 return False
         return True
+
+
+""" https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/description/
+  l
+[ 2, 7, 11, 15]
+            r
+l+r = t
+[l,r]
+"""
+
+
+class Solution:
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
+        l, r = 0, len(numbers) - 1
+
+        while l < r:
+            s = numbers[r] + numbers[l]
+            if target == s:
+                return [l + 1, r + 1]
+            elif s < target:
+                l += 1
+            else:
+                r -= 1
