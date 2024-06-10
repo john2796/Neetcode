@@ -45,4 +45,16 @@ AND w1.temperature > w2.temperature; -- select w1 that are greater in temp from 
 
 
 -- https://leetcode.com/problems/average-time-of-process-per-machine/description/?envType=study-plan-v2&envId=top-sql-50
+/* Average Time of Process per Machine
+ - find the average time each machine takes to complete to process
+ - time to complete a process is the end_timestamp - start_timestamp
+ - average time is total_time / number_of_processes that were run
+ - result table should have machine_id , processing_time rounded dto 3 decimal places
+*/
 
+select a1.machine_id, round(avg(a2.timestamp - a1.timestamp), 3) as processing_time
+from Activity a1
+join Activity a2
+on a1.machine_id = a2.machine_id and a1.process_id = a2.process_id
+and a1.activity_type = 'start' and a2.activity_type = 'end'
+group by a1.machine_id;
