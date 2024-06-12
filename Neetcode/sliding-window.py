@@ -81,11 +81,17 @@ class Solution:
 
 
 # https://leetcode.com/problems/minimum-window-substring/
+"""
+- track t count
+- expand window add right char into window, increment have if char in countT and window and countT val are same
+- shrink window when have and need are equal , update result when window length < resLen, pop from the left window
+"""
+
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         if t == "":
             return ""
-        # track t count
         countT, window = {}, {}
         for c in t:
             countT[c] = 1 + countT.get(c, 0)
@@ -95,14 +101,12 @@ class Solution:
         l = 0
 
         for r in range(len(s)):
-            # expand window add right char into window, increment have if char in countT and window and countT val are same
             c = s[r]
             window[c] = 1 + window.get(c, 0)
 
             if c in countT and window[c] == countT[c]:
                 have += 1
 
-            # shrink window when have and need are equal , update result when window length < resLen, pop from the left window
             while have == need:
                 # update our result
                 if (r - l + 1) < resLen:
