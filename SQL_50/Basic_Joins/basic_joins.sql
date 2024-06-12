@@ -58,3 +58,40 @@ join Activity a2
 on a1.machine_id = a2.machine_id and a1.process_id = a2.process_id
 and a1.activity_type = 'start' and a2.activity_type = 'end'
 group by a1.machine_id;
+
+
+-- https://leetcode.com/problems/employee-bonus/description/?envType=study-plan-v2&envId=top-sql-50
+
+select e.name, b.bonus from Employee e
+left join Bonus b
+on b.empId = e.empId 
+where b.bonus < 1000 or b.bonus is null;
+
+-- https://leetcode.com/problems/students-and-examinations/description/?envType=study-plan-v2&envId=top-sql-50
+-- Select specific columns from the Students, Subjects, and Examinations tables
+select 
+    s.student_id,           -- Select the student ID from the Students table
+    s.student_name,         -- Select the student name from the Students table
+    sub.subject_name,       -- Select the subject name from the Subjects table
+    count(e.subject_name) as attended_exams -- Count the number of examinations attended by each student for each subject
+
+from 
+    Students s              -- From the Students table aliased as 's'
+cross join 
+    Subjects sub            -- combines each student with each subject, ensuring every student-subject pair is considered.
+
+left outer join 
+    Examinations e          -- Left outer join with the Examinations table aliased as 'e', using a left join to ensure all student-subject pairs are retained even if no exams are recorded.
+on 
+    s.student_id = e.student_id         -- Join condition on student ID
+    and sub.subject_name = e.subject_name -- and subject name to match students and their respective subjects in the Examinations table
+
+-- Group the results by student ID, student name, and subject name to aggregate the count of attended exams
+group by 
+    s.student_id, 
+    s.student_name, 
+    sub.subject_name 
+-- Order the final results by student ID and then by subject name for organized output
+order by 
+    s.student_id, 
+    sub.subject_name;
