@@ -1,11 +1,4 @@
-""" https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-     b
-[ 7, 1, 5, 3, 6, 4 ]
-              s 
-max_profit=-6
-"""
-
-
+# https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
         buy = prices[0]
@@ -54,3 +47,34 @@ class Solution:
                 charSet[s[l]] -= 1
                 l += 1
         return r - l + 1
+
+
+# https://leetcode.com/problems/permutation-in-string/
+"""
+- create a hashmap with the count of every character in the string s1
+- then we slide a window over the strings s2 and decrease the counter for the characters that occured in the window
+- as soon as all counters in the hashmap get to zero that means we encountered the permutation
+"""
+
+
+class Solution:
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        cntr, w, match = Counter(s1), len(s1), 0
+
+        for i in range(len(s2)):
+            if s2[i] in cntr:
+                if not cntr[s2[i]]:
+                    match -= 1
+                cntr[s2[i]] -= 1
+                if not cntr[s2[i]]:
+                    match += 1
+
+            if i >= w and s2[i - w] in cntr:
+                if not cntr[s2[i - w]]:
+                    match -= 1
+                cntr[s2[i - w]] += 1
+                if not cntr[s2[i - w]]:
+                    match += 1
+            if match == len(cntr):
+                return True
+        return False
