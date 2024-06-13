@@ -97,3 +97,18 @@ class Solution:
 
         backtrack(0, 0)
         return res
+
+
+# https://leetcode.com/problems/daily-temperatures/
+class Solution:
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+        s = []  # pair: [temp, index]
+        res = [0] * len(temperatures)
+
+        for i, t in enumerate(temperatures):
+            while s and t > s[-1][0]:
+                sT, sI = s.pop()
+                res[sI] = i - sI
+            s.append((t, i))
+
+        return res
