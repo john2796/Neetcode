@@ -46,3 +46,27 @@ class MinStack:
 # obj.pop()
 # param_3 = obj.top()
 # param_4 = obj.getMin()
+
+
+#  https://leetcode.com/problems/evaluate-reverse-polish-notation/
+class Solution:
+    def evalRPN(self, tokens: List[str]) -> int:
+        s = []
+
+        for t in tokens:
+            if t == "+":
+                v1, v2 = s.pop(), s.pop()
+                s.append(v1 + v2)
+            elif t == "-":
+                v1, v2 = s.pop(), s.pop()
+                s.append(v2 - v1)
+            elif t == "*":
+                v1, v2 = s.pop(), s.pop()
+                s.append(int(v2) * int(v1))
+            elif t == "/":
+                v1, v2 = s.pop(), s.pop()
+                s.append(int(float(v2) / v1))
+            else:
+                s.append(int(t))
+
+        return s[0]
