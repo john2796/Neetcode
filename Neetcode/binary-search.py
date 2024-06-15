@@ -33,3 +33,34 @@ class Solution:
             else:
                 r = m - 1
         return False
+
+
+# https://leetcode.com/problems/koko-eating-bananas/
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        l, r = 1, max(piles)
+
+        def isSufficientSpeed(cnt):
+            return sum(ceil(i / cnt) for i in piles) <= h
+
+        while l < r:
+            m = (l + r) // 2
+            if isSufficientSpeed(m):
+                r = m
+            else:
+                l = m + 1
+        return l
+
+
+# https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+
+        while l < r:
+            m = l + (r - l) // 2
+            if nums[m] < nums[r]:
+                r = m
+            else:
+                l = m + 1
+        return nums[l]
