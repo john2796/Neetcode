@@ -88,3 +88,41 @@ class Solution:
                 else:
                     r = m - 1
         return -1
+    
+# https://leetcode.com/problems/time-based-key-value-store/
+class TimeMap:
+    def __init__(self):
+        self.dic = {}
+
+    def set(self, key: str, value: str, timestamp: int) -> None:
+        if key not in self.dic:
+            self.dic[key] = []
+        self.dic[key].append([value, timestamp])
+
+    def get(self, key: str, timestamp: int) -> str:
+        res = ""
+        values = self.dic.get(key, [])
+        l, r = 0, len(values) - 1
+        while l <= r:
+            m = (l+r) >> 1
+            if values[m][1] <= timestamp:
+                l = m + 1
+                res = values[m][0]
+            else:
+                r = m - 1
+        return res
+
+# https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+# my solution
+class Solution:
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        nums = nums1 + nums2
+        nums.sort()
+        l,r = 0, len(nums) - 1
+
+        m = (r+l) // 2
+        if (len(nums) % 2) != 0:
+            return nums[m]
+        else:
+            return (nums[m] + nums[m+1]) / 2
+        
