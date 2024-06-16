@@ -71,3 +71,23 @@ class Solution:
             first.next =second
             second.next = tmp1
             first, second = tmp1, tmp2
+
+# https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy = ListNode(0, head)
+        left = dummy
+        cur = head
+        while n > 0:
+            cur = cur.next
+            n -= 1
+        while cur:
+            cur = cur.next
+            left = left.next
+        left.next = left.next.next
+        return dummy.next
