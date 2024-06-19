@@ -1,7 +1,7 @@
 # TOP SQL 50
 
-1. https://leetcode.com/studyplan/top-sql-50/
-2. https://www.w3schools.com/sql/sql_null_values.asp
+ https://leetcode.com/studyplan/top-sql-50/
+ https://www.w3schools.com/sql/sql_null_values.asp
 
 1. What is SQL ?
 SQL (Structured Query Language) is a standardized langauge used to interact with relational databases. It allows users to query, manipulate, and manage data stored in relational database management system (RDBMS).
