@@ -108,3 +108,170 @@ class LinkedList:
             curr = curr.next
         print("None")
 ```
+
+## Most common ways to apporach LeetCode Linked list problems
+
+1. **Two Pointers (Fast and Slow)**
+   This technique uses two pointers that move at different speeds to solve problems related to cycles, middle elements, and more.
+
+Example: Linked List Cycle
+
+```python
+class Solution:
+    def hasCycle(self, head: ListNode) -> bool:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+```
+
+Example: Middle of the Linked List
+
+```python
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+```
+
+2. **Reverse a Linked List**
+   Reversing a linked list is a common subroutine for many linked list problems.
+
+Example: Reverse Linked List
+
+```python
+class Solution:
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head
+        while curr:
+            next_temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_temp
+        return prev
+```
+
+3. **Merging Two Linked Lists**
+   Combining two sorted linked lists into one sorted linked list is a frequent task.
+
+Example: Merge Two sorted Lists
+
+```python
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummy = ListNode()
+        tail = dummy
+
+        while l1 and l2:
+            if l1.val < l2.val:
+                tail.next = l1
+                l1 = l1.next
+            else:
+                tail.next = l2
+                l2 = l2.next
+            tail = tail.next
+        tail.next = l1 if l1 else l2
+        return dummy.next
+```
+
+4. **Detect and Remove Cycles**
+   Detecting and removing cycle is essential for problems related to cyclic linked lists.
+
+Example: Linked List Cycle II
+
+```python
+class Solution:
+    def detectCycle(selef, head: ListNode) -> ListNode:
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                slow = head
+                while slow != fast:
+                    slow = slow.next
+                    fast = fast.next
+                return slow
+        return None
+```
+
+5. **Finding the Intersection of Two Linked Lists**
+   Identifying the intersection node between two linked lists.
+
+Example: Intersection of Two Linked Lists
+
+```python
+class Solution:
+    def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
+        if not headA or not headB:
+            return None
+        pA, pB = headA, headB
+        while pA != pB:
+            pA = headB if not pA else pA.next
+            pB = headA if not pB else pB.next
+        return pA
+```
+
+6. **Removing N-th Node from End**
+   This involves find the n-th node from the end and removing it.
+
+Example: Remove N-t Node from the End of list
+
+```python
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0, head)
+        slow = fast = dummy
+        for _ in range(n + 1):
+            fast = fast.next
+        while fast:
+            slow = slow.next
+            slow = fast.next
+        slow.next = slow.next.next
+        return dummy.next
+```
+
+7. Recursion Solutions
+   Sometimes recursion provides a more elegant solution, especially for problems involving nested or hierarchical structures.
+
+Example: Reverse Linked List II
+
+```python
+class Solution:
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        if not head:
+            return None
+
+        def reverseN(node, n):
+            if n == 1:
+                return node
+            last = reverseN(node.next, n-1)
+            node.next.next = node
+            return last
+
+        dummy = ListNode(0, head)
+        prev = dummy
+
+        for _ in range(left - 1):
+            prev = prev.next
+
+        prev.next = reverseN(prev.next, right - left + 1)
+        prev.next.next = None
+
+        return dummy.next
+```
+
+## Tips for solving Linked List Problems:
+
+1. Understand the Problem: Carefully read the problem statement and understand the requirements. Draw diagrams if necessary.
+2. Edge Cases: Consider edge case such as empty lists, single-node lists, and lists with cycles.
+3. Pointer Manipulation: Be cautious with pointer manipulation to avoid issues like null pointer dereference.
+4. Dummy Nodes: Use dummy nodes to simplify edge cases, especially when dealing with head nodes.
+5. Practice: Regular practice with a variety of linked list problems helps in recognizing patterns and common techniues.
