@@ -3,10 +3,10 @@
  https://leetcode.com/studyplan/top-sql-50/
  https://www.w3schools.com/sql/sql_null_values.asp
 
-1. What is SQL ?
+## 1. What is SQL ?
 SQL (Structured Query Language) is a standardized langauge used to interact with relational databases. It allows users to query, manipulate, and manage data stored in relational database management system (RDBMS).
 
-2. Key Components of SQL
+## 2. Key Components of SQL
 
 **a. DDL (Data Definition Language)**
 DDL is used to define and manage the structure of database objects
@@ -98,7 +98,7 @@ GRANT SELECT ON Students TO user1;
 REVOKE SELECT ON Students FROM user1;
 ```
 
-3. Common Data Types in SQL
+## 3. Common Data Types in SQL
 
 SQL supports various data types that define the type of data a column can hold. Common data types include:
 - Numeric Types: `INT`, `FLOAT`, `DECIMAL`
@@ -107,7 +107,7 @@ SQL supports various data types that define the type of data a column can hold. 
 - Boolean: `BOOLEAN`
 - Binary Data: `BLOB`
 
-4. SQL Constraints
+## 4. SQL Constraints
 Constraints enforce rules on data columns to ensure data integrity:
 - PRIMARY KEY: Uniquely identifies each record in a table.
 - FOREIGN KEY: Establishes a link between two tables.
@@ -115,12 +115,12 @@ Constraints enforce rules on data columns to ensure data integrity:
 - UNIQUE: Ensures all values in a column are different.
 - CHECK: Ensures all values in a column satisfy a specific condition.
 
-5. Relationship in SQL
+## 5. Relationship in SQL
 - On-to-One: Each record in Table A is related to one record in table B
 - One-to-Many: Each record in Table A can be related to multiple records in table B.
 - Many-to-Many: Multiples records in Table A can be related to multiple records in Table B through an intermediary table.
 
-6. SQL Joins
+## 6. SQL Joins
 Joins combine rows from two or more tables based on related column:
 
 - INNER JOIN: Returns records that have matching values in both tables.
@@ -151,7 +151,7 @@ FROM Customers
 FULL JOIN Orders ON Customers.CustomerID = Orders.CustomerID;
 ```
 
-7. SQL Functions
+## 7. SQL Functions
 SQL provides various built-in functions for manipulating data:
 
 - Aggregate Functions: `COUNT()`, `SUM()`, `AVG()`, `MIN()`, `MAX()`
