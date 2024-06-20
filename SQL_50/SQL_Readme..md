@@ -101,24 +101,24 @@ REVOKE SELECT ON Students FROM user1;
 ## 3. Common Data Types in SQL
 
 SQL supports various data types that define the type of data a column can hold. Common data types include:
-- Numeric Types: `INT`, `FLOAT`, `DECIMAL`
-- Character Strings: `VARCHAR`, `CHAR`
-- Date and Time Types: `DATE`, `TIME`, `DATETIME`
-- Boolean: `BOOLEAN`
-- Binary Data: `BLOB`
+- **Numeric Types**: `INT`, `FLOAT`, `DECIMAL`
+- **Character Strings**: `VARCHAR`, `CHAR`
+- **Date and Time Types**: `DATE`, `TIME`, `DATETIME`
+- **Boolean**: `BOOLEAN`
+- **Binary Data**: `BLOB`
 
 ## 4. SQL Constraints
 Constraints enforce rules on data columns to ensure data integrity:
-- PRIMARY KEY: Uniquely identifies each record in a table.
-- FOREIGN KEY: Establishes a link between two tables.
-- NOT NULL: Ensures a column cannot have NULL values.
-- UNIQUE: Ensures all values in a column are different.
-- CHECK: Ensures all values in a column satisfy a specific condition.
+- **PRIMARY KEY**: Uniquely identifies each record in a table.
+- **FOREIGN KEY**: Establishes a link between two tables.
+- **NOT NULL**: Ensures a column cannot have NULL values.
+- **UNIQUE**: Ensures all values in a column are different.
+- **CHECK**: Ensures all values in a column satisfy a specific condition.
 
 ## 5. Relationship in SQL
-- On-to-One: Each record in Table A is related to one record in table B
-- One-to-Many: Each record in Table A can be related to multiple records in table B.
-- Many-to-Many: Multiples records in Table A can be related to multiple records in Table B through an intermediary table.
+- **On-to-One**: Each record in Table A is related to one record in table B
+- **One-to-Many**: Each record in Table A can be related to multiple records in table B.
+- **Many-to-Many**: Multiples records in Table A can be related to multiple records in Table B through an intermediary table.
 
 ## 6. SQL Joins
 Joins combine rows from two or more tables based on related column:
