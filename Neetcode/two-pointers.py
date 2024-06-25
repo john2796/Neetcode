@@ -143,7 +143,6 @@ count=5, left_max=3, right_max=2
 count=6, left_max=3, right_max=2
 """
 
-
 class Solution:
     def trap(self, height: List[int]) -> int:
         i = 0
