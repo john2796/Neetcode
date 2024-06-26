@@ -60,3 +60,62 @@ class Solution:
                     q.append(node.right)
             level += 1  # add logic for level here
         return level
+
+
+class Solution:
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        res = 0
+
+        def dfs(root):
+            nonlocal res
+            if not root:
+                return 0
+            # add height of left+right
+            left = dfs(root.left)
+            right = dfs(root.right)
+            res = max(res, left + right)
+            return 1 + max(left, right)
+
+        dfs(root)
+        return res
+
+
+class Solution:
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        def dfs(root):
+            if not root:
+                return [True, 0]
+            left = dfs(root.left)
+            right = dfs(root.right)
+            balanced = left[0] and right[0] and abs(left[1] - right[1]) <= 1
+            return [balanced, 1 + max(left[1], right[1])]
+
+        return dfs(root)[0]
+
+
+class Solution:
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        if not p and not q:
+            return True
+        if p and q and p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        else:
+            return False
+       self.right = right
+
+class Solution:
+    def isSubtree(self, r: Optional[TreeNode], s: Optional[TreeNode]) -> bool:
+        if not s:
+            return True
+        if not r:
+            return False
+        if self.isSameTree(r, s):
+            return True
+        return self.isSubtree(r.left, s) or self.isSubtree(r.right, s)
+    
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        if not p and not q:
+            return True
+        if p and q and p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        return False
