@@ -119,3 +119,48 @@ class Solution:
         if p and q and p.val == q.val:
             return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
         return False
+
+
+# inorder travelsal + bst
+class Solution:
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        self.sortedArr = []
+        self.inorderTraverse(root)
+        return self.sortedArrToBST(0, len(self.sortedArr) - 1)
+
+    def inorderTraverse(self, root) -> None:
+        if not root:
+            return
+        self.inorderTraverse(root.left)
+        self.sortedArr.append(root)
+        self.inorderTraverse(root.right)
+    # bst
+    def sortedArrToBST(self, l: int, r: int) -> TreeNode:
+        if l > r:
+            return None
+        m = (l+r) // 2
+        root = self.sortedArr[m]
+        root.left = self.sortedArrToBST(l, m - 1)
+        root.right = self.sortedArrToBST(m + 1, r)
+        return root
+
+
+# BFS level order traversal
+class Solution:
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        # bfs
+        q = deque()
+        if root:
+            q.append(root)
+        res = []
+        while q:
+            lvl = []
+            for i in range(len(q)):
+                node = q.popleft()
+                lvl.append(node.val)
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
+            res.append(lvl)
+        return res
