@@ -272,6 +272,17 @@ class Solution:
 
 # preorder -> will always be the root 
 # inorder -> go through three in order left to right
+"""
+preorder = [x, x, x, x, 7]
+                       r
+inorder = [x, x, x, x, 7]
+                      m
+                  l       r
+   3 
+9   20
+    / \
+   15   7
+"""
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
         if not preorder or not inorder:
@@ -282,4 +293,77 @@ class Solution:
         root.left = self.buildTree(preorder[1 : mid + 1], inorder[:mid])
         root.right = self.buildTree(preorder[mid + 1 :], inorder[mid+1 :])
         return root
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        res = [root.val]
+        def dfs(node):
+            if not node:
+                return 0
+            l = max(dfs(node.left), 0)
+            r = max(dfs(node.right), 0)
+
+            res[0] = max(res[0], node.val + l + r)
+            return node.val + max(l, r)
             
+        dfs(root)
+        return res[0]
+
+# Definition for a binary tree node.
+# class TreeNode(object):
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Codec:
+
+    def serialize(self, root):
+        """Encodes a tree to a single string.
+        
+        :type root: TreeNode
+        :rtype: str
+        """
+        res = []
+        def dfs(node):
+            if not node:
+                res.append("N")
+                return
+            res.append(str(node.val))
+            dfs(node.left)
+            dfs(node.right)
+        dfs(root)
+        return ",".join(res)
+        
+
+    def deserialize(self, data):
+        """Decodes your encoded data to tree.
+        
+        :type data: str
+        :rtype: TreeNode
+        """
+        vals = data.split(",")
+        self.i = 0
+        def dfs():
+            if vals[self.i] == "N":
+                self.i += 1
+                return None
+            node = TreeNode(int(vals[self.i]))
+            self.i += 1
+            node.left = dfs()
+            node.right = dfs()
+            return node
+        return dfs()
+        
+
+# Your Codec object will be instantiated and called as such:
+# ser = Codec()
+# deser = Codec()
+# ans = deser.deserialize(ser.serialize(root))
