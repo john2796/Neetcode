@@ -238,8 +238,7 @@ class Solution:
         def dfs(node, left, right):
             if not node:
                 return True
-            print(left, node.val, right)
-            if not (left < node.val < right):
+            if not (node.val < right and node.val > left):
                 return False
             return dfs(node.left, left , node.val) and dfs(node.right, node.val , right)
         return dfs(root, float("-inf"), float("inf"))
