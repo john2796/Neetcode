@@ -164,3 +164,61 @@ class Solution:
                     q.append(node.right)
             res.append(lvl)
         return res
+
+class Solution:
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        q = deque()
+        if root:
+            q.append(root)
+
+        res = []
+        while q:
+            rightSide = None
+            for i in range(len(q)):
+                node = q.popleft()
+                if node:
+                    rightSide = node
+                    q.append(node.left)
+                    q.append(node.right)
+            # store value from every level
+            if rightSide:
+                res.append(rightSide.val)
+        return res
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
+
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        while True:
+            if root.val < p.val and root.val < q.val:
+                root = root.right
+            elif root.val > p.val and root.val > q.val:
+                root = root.left
+            else:
+                return root
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def goodNodes(self, root: TreeNode) -> int:
+        def dfs(node, maxVal):
+            if not node:
+                return 0
+            res = 1 if node.val >= maxVal else 0 # increment good nodes if current node is greater than max val
+            maxVal = max(maxVal, node.val) # store the max val
+
+            # count the good nodes
+            res += dfs(node.left, maxVal)
+            res += dfs(node.right, maxVal)
+            return res
+        return dfs(root, root.val)
