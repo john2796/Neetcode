@@ -322,7 +322,7 @@ class Solution:
 #         self.val = x
 #         self.left = None
 #         self.right = None
-
+# searalize, dfs throught root and store values in res then return a joined one string , to deserialize split the join string dfs to create new bst
 class Codec:
 
     def serialize(self, root):
