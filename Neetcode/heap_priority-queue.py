@@ -126,8 +126,8 @@ class Solution:
                 if cnt:
                     q.append([cnt, time + n])
             # if the cooldown period for a task has expired, push it back to maxHeap
-            if cnt:
-                q.append([cnt, time + n])
+            if q and q[0][1] == time:
+                heapq.heappush(maxHeap, q.popleft()[0])
         # return the total time required to execute all tasks
         return time
         
