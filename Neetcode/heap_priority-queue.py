@@ -102,35 +102,21 @@ class Solution2:
 # Task Scheduler - return the minimum numbers of intervals required to complete all tasks.
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
-        # count the frequency of each task
-        count = Counter(tasks)
-        # create max heap using a negative count because heapq in Python is a min-heap
-        maxHeap = [-cnt for cnt in count.values()]
+        c = Counter(tasks)
+        maxHeap = [-cnt for cnt in c.values()]
         heapq.heapify(maxHeap)
-        # initialize the current time
-        time =0
-        # initialize a queue to keep track of tasks in their cooldown period
-        q = deque() # pairs of [-cnt, idleTime]
-        # process tasks until there are none left in both maxHeap and q
+
+        time = 0
+        q = deque() # [-cnt, iddleTime]
         while maxHeap or q:
-            # increment time for each interval
             time += 1
-            # if there are no tasks available in maxHeap but there are tasks in cooldown
-            if not maxHeap:
-                # jump time to the next tasks cooldown expiry
-                time = q[0][1]
-            else:
-                # pop the most frequent task from maxHeap
+            if maxHeap:
                 cnt = 1 + heapq.heappop(maxHeap)
-                # if the task still needs to be scheduled again, add it to the cooldowwn queue
                 if cnt:
-                    q.append([cnt, time + n])
-            # if the cooldown period for a task has expired, push it back to maxHeap
+                    q.append([cnt, time + n])       
             if q and q[0][1] == time:
                 heapq.heappush(maxHeap, q.popleft()[0])
-        # return the total time required to execute all tasks
-        return time
-        
+        return time 
     
 # 355. Design Twitter
 # Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and is able to see the 10 most recent tweets in the user's news feed.
