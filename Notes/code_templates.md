@@ -1,6 +1,7 @@
 # Code Templates
 
 ## Two Pointers: one input, opposite ends
+
 ```cpp
 int two_pointer_one_input(vector<int>& arr) {
   int left = 0;
@@ -8,7 +9,7 @@ int two_pointer_one_input(vector<int>& arr) {
   int ans = 0;
 
   while (left < right) {
-    // do some logic here with left and right 
+    // do some logic here with left and right
     if (CONDITION) {
       left++;
     } else {
@@ -20,7 +21,8 @@ int two_pointer_one_input(vector<int>& arr) {
 }
 ```
 
-# Two pointer: two inputs, exhausted both 
+# Two pointer: two inputs, exhausted both
+
 ```cpp
 int two_pointer_two_inputs(vector<int>& arr1, vector<int>& arr2) {
   int i = 0, j = 0, ans = 0;
@@ -32,7 +34,7 @@ int two_pointer_two_inputs(vector<int>& arr1, vector<int>& arr2) {
     } else {
       j++;
     }
-  } 
+  }
 
   while(i < arr1.size()) {
     // do logic
@@ -48,14 +50,13 @@ int two_pointer_two_inputs(vector<int>& arr1, vector<int>& arr2) {
 
 ```
 
-
 ```cpp
 int sliding_window_fn(vector<int>& arr) {
   int left = 0, ans = 0, curr = 0;
 
   for (int right = 0; right < arr.size(); right++) {
     // do some logic here to add arr[right] to curr
-    
+
 
     while(WINDOW_CONDITION_BROKEN) {
       // remove arr[left] from curr
@@ -84,8 +85,8 @@ string efficient_string_building(vector<char>& arr) {
 }
 ```
 
+## Linked List: fast and slow pointer
 
-## Linked List: fast and slow pointer 
 ```cpp
 int lls_fast_slow(ListNode* head) {
   ListNode* slow = head;
@@ -103,6 +104,7 @@ int lls_fast_slow(ListNode* head) {
 ```
 
 ## Reversing a linked list
+
 ```cpp
 ListNode* reverse_lls(ListNode* head) {
   ListNode* curr = head;
@@ -114,10 +116,11 @@ ListNode* reverse_lls(ListNode* head) {
     prev = curr;
     curr = next_node;
   }
-} 
+}
 ```
 
 ## Find number of subarrays that fit an exact criteria
+
 ```cpp
 int find_number_subarrays(vector<int>& arr, int k){
   unordered_map<int, int> counts;
@@ -133,7 +136,6 @@ int find_number_subarrays(vector<int>& arr, int k){
   return ans;
 }
 ```
-
 
 ## Monotonic increasing stack
 
@@ -158,6 +160,7 @@ int monotonic_increasing_stack(vector<int>& arr) {
 ```
 
 ## Binary Tree: DFS (recursive)
+
 ```cpp
 int binary_tree_dfs(TreeNode* root) {
   if (root == nullptr) {
@@ -166,7 +169,7 @@ int binary_tree_dfs(TreeNode* root) {
 
   int ans = 0;
   // do logic
-  
+
   dfs(root.left);
   dfs(root.right);
   return ans;
@@ -180,13 +183,13 @@ int binary_tree_dfs_iterative(TreeNode* root) {
   stack<TreeNode*> stack;
   stack.push(root);
   int ans = 0;
-  
+
   while(!stack.empty()) {
     TreeNode* node = stack.pop();
     stack.pop();
 
     // do logic
-    
+
     if (node->left != nullptr) {
       stack.push(node->left);
     }
@@ -211,7 +214,7 @@ int bfs_tree(TreeNode* root) {
   while(!queue.empty()) {
     int current_length = queue.size();
     // do logic for current level
-    
+
     for (int i = 0; i < current_length; i++) {
       TreeNode* node = queue.front();
       queue.pop();
@@ -229,9 +232,11 @@ int bfs_tree(TreeNode* root) {
 }
 ```
 
-##  Graph: DFS (recursive)
+## Graph: DFS (recursive)
+
 - For the graph templates, assume the nodes are numbered from 0 to n-1 and the graph is given as an adjacency list.
-Depending on the problem, you may need to convert the input into an equivalent adjacency list before using templates. 
+  Depending on the problem, you may need to convert the input into an equivalent adjacency list before using templates.
+
 ```cpp
 unordered_set<int> seen;
 int fn(vector<vector<int>>& graph) {
@@ -252,8 +257,8 @@ int dfs(int node, vector<vector<int>>& graph) {
 }
 ```
 
-
 ## Graph: DFS (iterative)
+
 ```cpp
 int fn_dfs_iterative(vector<vector<int>>& graph) {
   stack<int> stack;
@@ -261,7 +266,7 @@ int fn_dfs_iterative(vector<vector<int>>& graph) {
   stack.push(START_NODE);
   seen.insert(START_NODE);
   int ans=0;
-  
+
   while(!stack.empty()) {
     int node = stack.top();
     stack.pop();
@@ -285,7 +290,7 @@ int fn_graph_bfs(vector<vector<int>>& graph) {
   queue.push(START_NODE);
   seen.insert(START_NODE);
   int ans = 0;
-  
+
   while (!queue.empty()) {
     int node = queue.front();
     queue.pop();
@@ -301,6 +306,7 @@ int fn_graph_bfs(vector<vector<int>>& graph) {
 ```
 
 ## Find top k elements with heap
+
 ```cpp
 vector<int> find_top_k_element_heap(vector<int>& arr, int k){
   priority_queue<int, CRITERIA> heap;
@@ -341,13 +347,14 @@ int binarySearch(vector<int>& arr, int target) {
       left = mid + 1;
     }
   }
-  
+
   // left is the insertion point
   return left;
 }
 ```
 
 ## Binary search: duplicate element, left-most insertion point
+
 ```cpp
 int binarySearch(vector<int>& arr, int target){
   int left = 0;
@@ -367,6 +374,7 @@ int binarySearch(vector<int>& arr, int target){
 ```
 
 ## Binary search: for greedy problems, if looking for minimum
+
 ```cpp
 int binary_search_minimum(vector<int>& arr) {
   int left = MINIMUM_POSSIBLE_ANSWER;
@@ -385,6 +393,7 @@ int binary_search_minimum(vector<int>& arr) {
 ```
 
 ## if looking for maximum.
+
 ```cpp
 int fn_max_bs(vector<int>& arr) {
   int left = MINIMUM_POSSIBLE_ANSWER;
@@ -407,6 +416,7 @@ bool check(int x) {
 ```
 
 ## backtracking
+
 ```cpp
 int backtrack(STATE curr, OTHER_ARGUMENTS...){
   if(BASE_CASE) {
@@ -425,6 +435,7 @@ int backtrack(STATE curr, OTHER_ARGUMENTS...){
 ```
 
 ## Dynamic programming: top-down memoization
+
 ```cpp
 unordered_map<STATE, int> memo;
 int fn(vector<int>& arr) {
@@ -435,7 +446,7 @@ int dp(STATE, vector<int>& arr) {
     if (BASE_CASE) {
        return 0;
     }
-    
+
     if (memo.find(STATE) != memo.end()) {
       return memo[STATE];
     }
@@ -446,10 +457,10 @@ int dp(STATE, vector<int>& arr) {
   }
 ```
 
-
 ## Build a trie
+
 - note: using ga class is only necessary if you want to store data at each node.
-otherwise, you can implement a trie using only hash maps.
+  otherwise, you can implement a trie using only hash maps.
 
 ```cpp
 struct TrieNode {
@@ -505,3 +516,25 @@ while(!heap.empty()) {
 }
 ```
 
+## Task Scheduler - heap / priority queueu
+
+- return the minimum numbers of intervals required to complete all tasks.
+
+```python
+def leastInterval(self, tasks: List[str], n: int) -> int:
+  c = Counter(tasks)
+  maxHeap = [-cnt for cnt in c.values()]
+  heapq.heapify(maxHeap)
+  time = 0
+  q = deque() # [-cnt, iddleTime]
+  while maxHeap or q:
+    time += 1
+    if maxHeap:
+      cnt = 1 + heapq.heappop(maxHeap)
+      if cnt:
+        q.append([cnt, time + n])
+    # iddleTime pass add the value back to heapq
+    if q and q[0][1] == time:
+      heapq.heappush(maxHeap, q.popleft()[0])
+  return time
+```
