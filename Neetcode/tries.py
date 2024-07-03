@@ -9,10 +9,14 @@ Input
 Output
 [null, null, true, false, true, null, true]
 """
-class TrieNode: 
+
+
+class TrieNode:
     def __init__(self):
         self.children = [None] * 26
         self.end = False
+
+
 class Trie:
     def __init__(self):
         self.root = TrieNode()
@@ -45,6 +49,7 @@ class Trie:
             curr = curr.children[i]
         return True
 
+
 # Your Trie object will be instantiated and called as such:
 # obj = Trie()
 # obj.insert(word)
@@ -63,23 +68,26 @@ Output
 [null,null,null,null,false,true,true,true]
 
 """
-class TrieNode: 
+
+
+class TrieNode2:
     def __init__(self):
-        self.children = {} # a : TrieNode
+        self.children = {}  # a : TrieNode
         self.end = False
+
 
 class WordDictionary:
     def __init__(self):
-        self.root = TrieNode()
+        self.root = TrieNode2()
 
     def addWord(self, word: str) -> None:
         cur = self.root
         for c in word:
             if c not in cur.children:
-                cur.children[c] = TrieNode()
+                cur.children[c] = TrieNode2()
             cur = cur.children[c]
         cur.word = True
-    
+
     def search(self, word: str) -> bool:
         def dfs(j, root):
             cur = root
@@ -95,7 +103,9 @@ class WordDictionary:
                         return False
                     cur = cur.children[c]
             return cur.word
+
         return dfs(0, self.root)
+
 
 """
 212. Word Search II
@@ -104,7 +114,9 @@ given m x n board of characters and list of strings words, return all words of t
 Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
 Output: ["eat","oath"]
 """
-class TrieNode:
+
+
+class TrieNode3:
     def __init__(self):
         self.children = {}
         self.isWord = False
@@ -115,11 +127,11 @@ class TrieNode:
         cur.refs += 1
         for c in word:
             if c not in cur.children:
-                cur.children[c] = TrieNode()
+                cur.children[c] = TrieNode3()
             cur = cur.children[c]
             cur.refs += 1
         cur.isWord = True
-    
+
     def removeWord(self, word):
         cur = self
         cur.refs -= 1
@@ -127,9 +139,11 @@ class TrieNode:
             if c in cur.children:
                 cur = cur.children[c]
                 cur.refs -= 1
+
+
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        root = TrieNode()
+        root = TrieNode3()
         for w in words:
             root.addWord(w)
 
@@ -139,11 +153,11 @@ class Solution:
         def dfs(r, c, node, word):
             if (
                 r not in range(ROWS)
-                or not in range(COLS)
+                or c not in range(COLS)
                 or board[r][c] not in node.children
                 or node.children[board[r][c]].refs < 1
                 or (r, c) in visit
-                    ):
+            ):
                 return
             visit.add((r, c))
             node = node.children[board[r][c]]
@@ -158,7 +172,7 @@ class Solution:
             dfs(r, c + 1, node, word)
             dfs(r, c - 1, node, word)
             visit.remove((r, c))
-        
+
         for r in range(ROWS):
             for c in range(COLS):
                 dfs(r, c, root, "")
