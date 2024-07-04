@@ -31,3 +31,18 @@ round(count(distinct user_id) * 100 / (select count(user_id) from Users), 2) as 
 from Register
 group by contest_id
 order by percentage desc, contest_id;
+
+/* 1211. Queries Quality and Percentage
+quality : The average of the ratio between query rating and its position.
+poor_query_percentage : The percentage of all queries with rating less than 3.
+*/
+
+SELECT 
+    query_name,
+    ROUND(AVG(rating/position), 2) AS quality,
+    ROUND(SUM(CASE WHEN rating < 3 THEN 1 ELSE 0 END) / COUNT(*) * 100, 2) AS poor_query_percentage
+FROM 
+    Queries
+WHERE query_name is not null
+GROUP BY
+    query_name;
