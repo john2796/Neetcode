@@ -46,3 +46,24 @@ FROM
 WHERE query_name is not null
 GROUP BY
     query_name;
+
+
+-- https://leetcode.com/problems/monthly-transactions-i/description/?envType=study-plan-v2&envId=top-sql-50
+-- Select the desired columns from the Transactions table
+SELECT  
+    -- Extract the year and month from the transaction date (first 7 characters: YYYY-MM)
+    SUBSTR(trans_date, 1, 7) AS month,
+    -- Include the country column
+    country,
+    -- Count the total number of transactions
+    COUNT(id) AS trans_count,
+    -- Count the number of approved transactions using a CASE statement
+    SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+    -- Calculate the total amount of all transactions
+    SUM(amount) AS trans_total_amount,
+    -- Calculate the total amount of approved transactions using a CASE statement
+    SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
+-- Specify the table from which to retrieve the data
+FROM Transactions
+-- Group the results by month and country
+GROUP BY month, country;
