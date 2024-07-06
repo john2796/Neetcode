@@ -93,3 +93,9 @@ class Solution:
             pre = cur
             cur = cur.next
         return ans
+
+
+# https://leetcode.com/problems/pass-the-pillow/?envType=daily-question&envId=2024-07-06
+class Solution:
+    def passThePillow(self, n: int, time: int) -> int:
+        return n - abs(n - 1 - time % (n * 2 - 2))
