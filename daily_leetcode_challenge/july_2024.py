@@ -99,3 +99,9 @@ class Solution:
 class Solution:
     def passThePillow(self, n: int, time: int) -> int:
         return n - abs(n - 1 - time % (n * 2 - 2))
+
+# https://leetcode.com/problems/water-bottles/?envType=daily-question&envId=2024-07-07
+class Solution:
+    def numWaterBottles(self, nb: int, ne: int) -> int:
+        # 9 + 3 + 1 = 13
+        return nb + (nb - 1) // (ne - 1)
