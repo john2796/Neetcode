@@ -71,6 +71,96 @@ class Solution:
     
 
 # Network Delay Time
+class Solution:
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        edges = collections.defaultdict(list)
+        for u, v, w in times:
+            edges[u].append((v, w)) 
+        minHeap = [(0, k)]   
+        visit = set()
+        t = 0
+        while minHeap:
+            w1, n1 = heapq.heappop(minHeap)
+            if n1 in visit:
+                continue
+            visit.add(n1)
+            t = w1
+            for n2, w2 in edges[n1]:
+                if n2 not in visit:
+                    heapq.heappush(minHeap, (w1 + w2, n2))
+        return t if len(visit) == n else -1
+        # O(E * logV)
+    
 # Swim in Rising Water
+class Solution:
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        N = len(grid)
+        visit = set()
+        minH = [[grid[0][0], 0, 0]]  # (time/max-height, r, c)
+        directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+
+        visit.add((0, 0))
+        while minH:
+            t, r, c = heapq.heappop(minH)
+            if r == N - 1 and c == N - 1:
+                return t
+            for dr, dc in directions:
+                neiR, neiC = r + dr, c + dc
+                if (
+                    neiR < 0
+                    or neiC < 0
+                    or neiR == N
+                    or neiC == N
+                    or (neiR, neiC) in visit
+                ):
+                    continue
+                visit.add((neiR, neiC))
+                heapq.heappush(minH, [max(t, grid[neiR][neiC]), neiR, neiC])
+
 # Alien Dictionary
+class Solution:
+    def alienOrder(self, words: List[str]) -> str:
+        adj = {char: set() for word in words for char in word}
+
+        for i in range(len(words) - 1):
+            w1, w2 = words[i], words[i + 1]
+            minLen = min(len(w1), len(w2))          
+            if len(w1) > len(w2) and w1[:minLen] == w2[:minLen]:
+                return ""
+            for j in range(minLen):
+                if w1[j] != w2[j]:
+                    adj[w1[j]].add(w2[j])
+                    break
+        visited = {} # {char: bool} False visited, True current path
+        res = []
+        def dfs(char):
+            if char in visited:
+                return visited[char]
+            visited[char] = False
+            res.append(char)
+        
+        for char in adj:
+            if dfs(char):
+                return ""
+        res.reverse()
+        return "".join(res)
+    
+
 # Cheapest Flights Within K Stops
+class Solution:
+    def findCheapestPrice(
+        self, n: int, flights: List[List[int]], src: int, dst: int, k: int     
+    ) -> int:
+        prices = [float("inf")] * n
+        prices[src] = 0
+
+        for i in range(k + 1):
+            tmpPrices = prices.copy()
+
+            for s, d, p in flights: # s=source, d=dest, p=price
+                if prices[s] == float("inf"):
+                    continue
+                if prices[s] + p < tmpPrices[d]:
+                    tmpPrices[d] = prices[s] + p
+            prices = tmpPrices
+        return -1 if prices[dst] == float("inf") else prices[dst]
