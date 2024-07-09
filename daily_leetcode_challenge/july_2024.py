@@ -117,3 +117,21 @@ class Solution:
             return (recursion(n - 1, k) + k) % n
 
         return recursion(n, k) + 1
+
+
+# https://leetcode.com/problems/average-waiting-time/submissions/1315589100/?envType=daily-question&envId=2024-07-09
+class Solution:
+    def averageWaitingTime(self, c: List[List[int]]) -> float:
+        at = 0
+        tw = 0
+
+        for a, t in c:
+            at = max(at, a) + t
+            tw += at - a
+        return tw / len(c)
+
+        # at = (0, 1) + 2 = 3
+        # tw = 0 + 3 - 1 =  2
+
+        # at = (2, 2) + 5 = 7
+        # tw = 2 + 7 - 2 =  7
