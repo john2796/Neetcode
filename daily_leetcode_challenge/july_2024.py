@@ -100,8 +100,20 @@ class Solution:
     def passThePillow(self, n: int, time: int) -> int:
         return n - abs(n - 1 - time % (n * 2 - 2))
 
+
 # https://leetcode.com/problems/water-bottles/?envType=daily-question&envId=2024-07-07
 class Solution:
     def numWaterBottles(self, nb: int, ne: int) -> int:
         # 9 + 3 + 1 = 13
         return nb + (nb - 1) // (ne - 1)
+
+
+# https://leetcode.com/problems/find-the-winner-of-the-circular-game/?envType=daily-question&envId=2024-07-08
+class Solution:
+    def findTheWinner(self, n: int, k: int) -> int:
+        def recursion(n, k):
+            if n == 1:
+                return 0
+            return (recursion(n - 1, k) + k) % n
+
+        return recursion(n, k) + 1
