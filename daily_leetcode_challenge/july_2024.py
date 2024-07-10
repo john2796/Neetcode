@@ -135,3 +135,27 @@ class Solution:
 
         # at = (2, 2) + 5 = 7
         # tw = 2 + 7 - 2 =  7
+
+
+# https://leetcode.com/problems/crawler-log-folder/?envType=daily-question&envId=2024-07-10
+
+
+# Return the minimum number of operations needed to go back to the main folder after the change folder operations.
+class Solution:
+    def minOperations(self, logs: List[str]) -> int:
+        # "../" if main folder remain in the same folder
+
+        # "./" remain in the same folder
+
+        # "x/". move to child named x
+        lvl = 0
+        for l in logs:
+            if lvl < 1:
+                lvl = 0
+            if "../" == l:
+                lvl -= 1
+            elif "./" == l:
+                continue
+            else:
+                lvl += 1
+        return max(0, lvl)
