@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Solution:
     def threeConsecutiveOdds(self, arr: List[int]) -> bool:
         count = 0
@@ -159,3 +162,31 @@ class Solution:
             else:
                 lvl += 1
         return max(0, lvl)
+
+
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        # Initialize a stack to keep track of the indices of '(' characters
+        stack = deque()
+
+        # Initialize a list to build the result string
+        res = []
+
+        # Iterate through each character in the input string
+        for char in s:
+            if char == "(":
+                # If the character is '(', push the current length of the result list onto the stack
+                # This keeps track of the position where the '(' was found
+                stack.append(len(res))
+            elif char == ")":
+                # If the character is ')', pop the top index from the stack
+                # This index indicates where the matching '(' was found
+                idx = stack.pop()
+                # Reverse the substring in the result list that is enclosed by these parentheses
+                res[idx:] = res[idx:][::-1]
+            else:
+                # If the character is not a parenthesis, append it to the result list
+                res.append(char)
+
+        # Join all the characters in the result list to form the final output string
+        return "".join(res)
