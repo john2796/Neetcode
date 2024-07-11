@@ -169,24 +169,118 @@ class Solution:
 # ---- Two Pointers
 # valid palindrome
 """
-Problem:
+Problem: 
+A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+
+Given a string s, return true if it is a palindrome, or false otherwise.
+
 Approach:
+use two pointer l=0 and r=len(s) - 1, compare value and move pointers while not s[l].isalnum() and l < r:
 """
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        l, r = 0, len(s) - 1
+        
+        while l < r:
+            # edge case: lower case, non alpha
+            while not s[l].isalnum() and l < r:
+                l += 1
+            while not s[r].isalnum() and l < r:
+                r -= 1
+
+            if s[l].lower() != s[r].lower():
+                return False
+            l += 1
+            r -= 1
+            
+        return True
+
 # two sum II input array is sorted
 """
 Problem:
+Given integers numbers already sorted in non-decreasing order, 
+find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
+must use only constant extra space.
+
 Approach:
+two pointer + move pointer depending on the size of sum compared to target if sum is lower than target move left pointer otherwise move right pointer -1
 """
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        l, r = 0, len(nums) - 1
+
+        while l < r:
+            s = nums[r] + nums[l]
+            if s == target:
+                return [l + 1, r + 1]
+            elif s < target:
+                l += 1
+            else:
+                r -= 1
+        return []
+
 # 3sum
 """
 Problem:
+return all the triplets [nums[i], nums[j], nums[k]] such that 
+i != j, i != k, and j != k, and 
+nums[i] + nums[j] + nums[k] == 0.
+
+must not contain duplicate triplets.
+
 Approach:
+sort + skip n[i] == n[i -1] , 2sum, also check n[l] == n[l -1] and l <r l+=1.
 """
+class Solution:
+    def threeSum(self, n: List[int]) -> List[List[int]]:
+        res = []
+        n.sort()
+        for i in range(len(n)):
+            l = i + 1 
+            r = len(n) - 1
+            if i > 0 and n[i] == n[i - 1]:
+                continue
+            while l < r:
+                triplets = n[i] + n[l] + n[r]
+                if triplets == 0:
+                    res.append([n[i], n[l], n[r]])
+                    l += 1
+                    r -= 1
+                    while n[l] == n[l - 1] and l < r:
+                        l += 1
+                elif triplets < 0:
+                    l += 1
+                else:
+                    r -= 1
+        return res
+
+
 # container with most water
 """
 Problem:
+given array height of length n. n vertical lines drawn such that the two endpoints of the ith line are 
+(i, 0) and (i, height[i]).
+
+Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+Return the maximum amount of water a container can store.
+you may not slant the container.
+
 Approach:
+two pointer + calulate area + edge case h[r] <= h[l]: r-=1, both side will check if they're less than then move pointers l or r.
 """
+class Solution:
+    def maxArea(self, h: List[int]) -> int:
+        l, r = 0, len(h) - 1
+        res = 0
+        while l < r:
+            res = max(res, (r - l) * min(h[l], h[r]))
+            if h[l] < h[r]:
+                l += 1
+            elif h[r] <= h[l]:
+                r -= 1
+        return res
+    
 # trapping rain water
 """
 Problem:
