@@ -86,6 +86,8 @@ Problem: Given an integer array nums and an integer k, return the k most frequen
 
 Approach: count + freq + store n in freq count index + loop in reverse to get the most freq res
 """
+
+
 class Solution5:
     # store count frequency in arr , loop in reverse to get most frequent when res len equal to k return values
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -128,6 +130,8 @@ Problem: Determine if a 9 x 9 Sudoku board is valid. Only the filled cells need 
 
 Approach: use defaultdict(set) store m[r], n[c] , sub boxes
 """
+
+
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
         rows, cols = collections.defaultdict(set), collections.defaultdict(set)
@@ -140,13 +144,14 @@ class Solution:
                 if (
                     board[r][c] in rows[r]
                     or board[r][c] in cols[c]
-                    or board[r][c] in square[(r//3, c//3)]
-                ):  
+                    or board[r][c] in square[(r // 3, c // 3)]
+                ):
                     return False
                 rows[r].add(board[r][c])
                 cols[c].add(board[r][c])
-                square[(r//3, c//3)].add(board[r][c])
+                square[(r // 3, c // 3)].add(board[r][c])
         return True
+
 
 # longest consecutive sequence
 """
@@ -154,6 +159,8 @@ Problem: Given an unsorted array of integers nums, return the length of the long
 
 Approach: set(nums) + find starting point (n-1) not in set, found (n+length) in s, get max(longest, length)
 """
+
+
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
         s = set(nums)
@@ -165,7 +172,8 @@ class Solution:
                     length += 1
                 longest = max(length, longest)
         return longest
-    
+
+
 # ---- Two Pointers
 # valid palindrome
 """
@@ -177,10 +185,12 @@ Given a string s, return true if it is a palindrome, or false otherwise.
 Approach:
 use two pointer l=0 and r=len(s) - 1, compare value and move pointers while not s[l].isalnum() and l < r:
 """
+
+
 class Solution:
     def isPalindrome(self, s: str) -> bool:
         l, r = 0, len(s) - 1
-        
+
         while l < r:
             # edge case: lower case, non alpha
             while not s[l].isalnum() and l < r:
@@ -192,8 +202,9 @@ class Solution:
                 return False
             l += 1
             r -= 1
-            
+
         return True
+
 
 # two sum II input array is sorted
 """
@@ -205,6 +216,8 @@ must use only constant extra space.
 Approach:
 two pointer + move pointer depending on the size of sum compared to target if sum is lower than target move left pointer otherwise move right pointer -1
 """
+
+
 class Solution:
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         l, r = 0, len(nums) - 1
@@ -219,6 +232,7 @@ class Solution:
                 r -= 1
         return []
 
+
 # 3sum
 """
 Problem:
@@ -231,12 +245,14 @@ must not contain duplicate triplets.
 Approach:
 sort + skip n[i] == n[i -1] , 2sum, also check n[l] == n[l -1] and l <r l+=1.
 """
+
+
 class Solution:
     def threeSum(self, n: List[int]) -> List[List[int]]:
         res = []
         n.sort()
         for i in range(len(n)):
-            l = i + 1 
+            l = i + 1
             r = len(n) - 1
             if i > 0 and n[i] == n[i - 1]:
                 continue
@@ -269,6 +285,8 @@ you may not slant the container.
 Approach:
 two pointer + calulate area + edge case h[r] <= h[l]: r-=1, both side will check if they're less than then move pointers l or r.
 """
+
+
 class Solution:
     def maxArea(self, h: List[int]) -> int:
         l, r = 0, len(h) - 1
@@ -280,12 +298,36 @@ class Solution:
             elif h[r] <= h[l]:
                 r -= 1
         return res
-    
+
+
 # trapping rain water
 """
 Problem:
+    given non integers representing an elevation each bar 1,compute how much water it can trap after raining
 Approach:
+    use two pointer, track leftmax and right max,leftMax < rightMax, for both side res += max - height[pointer]
 """
+
+
+class Solution:
+    def trap(self, h: List[int]) -> int:
+        if not h:
+            return 0
+        l, r = 0, len(h) - 1
+        leftMax, rightMax = h[l], h[r]
+        res = 0
+
+        while l < r:
+            if leftMax < rightMax:
+                l += 1
+                leftMax = max(leftMax, h[l])
+                res += leftMax - h[l]
+            else:
+                r -= 1
+                rightMax = max(rightMax, h[r])
+                res += rightMax - h[r]
+        return res
+
 
 # ---- Sliding Window
 # best time to buy and sell stock
