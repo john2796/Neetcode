@@ -333,27 +333,44 @@ class Solution:
 # best time to buy and sell stock
 """
 Problem:
+array prices[i]  price of a given stock on the ith day.
+You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+
 Approach:
 """
 # longest substring without repeating characters
+
 """
-Problem:
-Approach:
+https://leetcode.com/problems/longest-repeating-character-replacement/
+
+Approach: sliding window , expand increment char count and max frequency, shrink window while (r - l + 1) - maxf > k *window - max_frequency.
 """
+
 # longest repeating character replacement
 """
-Problem:
-Approach:
+https://leetcode.com/problems/longest-repeating-character-replacement/description/
+
+Approach: 
+sliding window expand track max frequency fill count dictionary shrink while (r - l + 1) - maxf > k 
 """
 # permutation in string
 """
-Problem:
-Approach:
+Problem: https://leetcode.com/problems/permutation-in-string/
+Approach: 
+base edge case len(s1)>len(s2) return false,
+store s1 and s2 count in [0] * 26, 
+track matches loop through 26 to count matches s1Count and s2Count, 
+sliding window count matches for both s[r] and s[l]
 """
 # minimum window substring
 """
-Problem:
+https://leetcode.com/problems/minimum-window-substring/
 Approach:
+base case t == "" return "" 
+use sliding window track countT, window, have ,need, res, resLen 
+expand store char count, increment have if char in countT and value in countT and window equal
+shrink while have == need, update result, pop from the left window
 """
 # sliding window maximum
 """
