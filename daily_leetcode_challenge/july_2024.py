@@ -226,3 +226,63 @@ class Solution:
             else:
                 new_stack.append(char)
         return res
+
+
+
+# https://leetcode.com/problems/robot-collisions/description/?envType=daily-question&envId=2024-07-13
+"""
+Problem: 2751. Robot Collisions
+There are n 1-indexed robots, each having a position on a line, health, and movement direction.
+
+You are given 0-indexed integer arrays positions, healths, and a string directions (directions[i]) is either 'L' for left or 'R' for right). All integers in positions are unique.
+
+All robots start moving on the line simultaneously at the same speed in their given direction. If two robots ever share the same position while moving, they will collide.
+
+If two robots collide, the robot with lower health is removed from the line, and the health of the other robot decreases by one. The surviving robot continues in the same direction it was going. If both robots have the same health, they are both removed from the line.
+
+Your task is to determine the health of the robots that survive the collisions, in the same order that the robots were given, i.e final health of robot 1 (if survived), final health of robot2 (if survived), and so on. If there are no survivors, return an empty array.
+
+Return an array containing the health of the remaining robtos (in the order they were given in the input), after no further collisions can occur.
+
+Note: The positions may be unsorted
+"""
+
+class Solution:
+    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+        n = len(positions) # number of robots
+        indices = list(range(n))  # list of indices from 0 to n-1
+        res = [] # list to store the healt of surviving robots
+        stack = deque() # stack to store the indices of right-moving robots
+
+        # sort indices based on their positions
+        indices.sort(key=lambda x: positions[x])
+
+        # iterate through each robot based on their sorted positions
+        for current_index in indices:
+            if directions[current_index] == "R":
+                # if the current robot is moving right, add its index to the stack
+                stack.append(current_index)
+            else:
+                # if the current robot is moving left, check for collisions with right-moving robots
+                while stack and healths[current_index] > 0:
+                    top_index = stack.pop()
+
+                    if healths[top_index] > healths[current_index]:
+                        # top robot survives, current robot is destroyed
+                        healths[top_index] -= 1
+                        healths[current_index] = 0
+                        stack.append(top_index) # re-add top robot to the stack as it survived
+                    elif healths[top_index] < healths[current_index]:
+                        # current robot survives, top robot is destroyed
+                        healths[current_index] -= 1
+                        healths[top_index] = 0
+                    else:
+                        # both robots are destroyed if they have the same health
+                        healths[current_index] = 0
+                        healths[top_index] = 0
+
+        # collect surviving robot's healths
+        for i in range(n):
+            if healths[i] > 0:
+                res.append(healths[i])
+        return res
