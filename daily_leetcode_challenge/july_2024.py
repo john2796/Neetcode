@@ -207,16 +207,16 @@ class Solution:
             top_score = x
             bot = "ba"
             bot_score = y
-        
+
         # removing first top substring cause they give more points
         stack = []
         for char in s:
             if char == top[1] and stack and stack[-1] == top[0]:
                 res += top_score
-                stack.pop() # delete the first char of this substring
+                stack.pop()  # delete the first char of this substring
             else:
                 stack.append(char)
-        
+
         # removing bot substring cause they give less or equal amount of scores
         new_stack = []
         for char in stack:
@@ -226,7 +226,6 @@ class Solution:
             else:
                 new_stack.append(char)
         return res
-
 
 
 # https://leetcode.com/problems/robot-collisions/description/?envType=daily-question&envId=2024-07-13
@@ -247,12 +246,15 @@ Return an array containing the health of the remaining robtos (in the order they
 Note: The positions may be unsorted
 """
 
+
 class Solution:
-    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
-        n = len(positions) # number of robots
+    def survivedRobotsHealths(
+        self, positions: List[int], healths: List[int], directions: str
+    ) -> List[int]:
+        n = len(positions)  # number of robots
         indices = list(range(n))  # list of indices from 0 to n-1
-        res = [] # list to store the healt of surviving robots
-        stack = deque() # stack to store the indices of right-moving robots
+        res = []  # list to store the healt of surviving robots
+        stack = deque()  # stack to store the indices of right-moving robots
 
         # sort indices based on their positions
         indices.sort(key=lambda x: positions[x])
@@ -271,7 +273,9 @@ class Solution:
                         # top robot survives, current robot is destroyed
                         healths[top_index] -= 1
                         healths[current_index] = 0
-                        stack.append(top_index) # re-add top robot to the stack as it survived
+                        stack.append(
+                            top_index
+                        )  # re-add top robot to the stack as it survived
                     elif healths[top_index] < healths[current_index]:
                         # current robot survives, top robot is destroyed
                         healths[current_index] -= 1
@@ -286,3 +290,54 @@ class Solution:
             if healths[i] > 0:
                 res.append(healths[i])
         return res
+
+
+# https://leetcode.com/problems/create-binary-tree-from-descriptions/description/?envType=daily-question&envId=2024-07-15
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        # Approach: convert to graph with breadth first search
+
+        # sets to track unique children and parents
+        children = set()
+        parents = set()
+
+        # dictionary to store parent to children relationship
+        parentToChildren = {}
+
+        # build graph from parent to child, and add nodes to sets
+        for d in descriptions:
+            parent, child, isLeft = d
+            parents.add(parent)
+            parents.add(child)
+            children.add(child)
+            if parent not in parentToChildren:
+                parentToChildren[parent] = []
+            parentToChildren[parent].append((child, isLeft))
+
+        # find the root node by checking which node is in parents but not in children
+        for parent in parents.copy():
+            if parent in children:
+                parents.remove(parent)
+        root = TreeNode(next(iter(parents)))
+        # starting from root, use BFS to construct binary tree
+
+        q = deque([root])
+
+        while q:
+            parent = q.popleft()
+            # iterate over children of current parent
+            for childValue, isLeft in parentToChildren.get(parent.val, []):
+                child = TreeNode(childValue)
+                q.append(child)
+                # Attach child node to its parennt based on isLeft flag
+                if isLeft == 1:
+                    parent.left = child
+                else:
+                    parent.right = child
+        return root
