@@ -372,14 +372,54 @@ use sliding window track countT, window, have ,need, res, resLen
 expand store char count, increment have if char in countT and value in countT and window equal
 shrink while have == need, update result, pop from the left window
 """
+
 # sliding window maximum
+
 """
-Problem:
 Approach:
+Instead of recalculating maximum for each window, we can utilize a double-ended queue (deque). The beauty of deques is their ability to add or remove elements from both ends in constant time, making them perfect for this scenerio.
+
+1. Initialization: Begin by defining an empty deque and a result list.
+2. Iterate over nums:
+    - For each number, remove indices from the front of the deque if they are out of the current window's bounds.
+    - Next, remove indices form the back if the numbers they point to are smaller than the current number. This ensures our deque always has the maximum of the current window at its front.
+    - Add the current index to the deque.
+    - If the current index indicates that we've seen at least k numbers, add the front of the deuque (i.e, the current window's maximum) to the result list.
+3. Return the list
 """
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        if not nums:
+            return []
+        if k == 1:
+            return nums
+        deq = deque()
+        res = []
+        for i in range(len(nums)):
+            while deq and deq[0] < (i - k + 1):
+                deq.popleft()
+            while deq and nums[i] > nums[deq[-1]]:
+                deq.pop()
+            deq.append(i)
+            if i >= k - 1:
+                res.append(nums[deq[0]])
+        return res
 
 # ---- Stack
 # valid parenthesis
+class Solution:
+    def isValid(self, s: str) -> bool:
+        Map = {")": "(", "]": "[", "}": "{"}
+        stack = []
+        for c in s:
+            if c not in Map:
+                stack.append(c)
+                continue
+            if not stack or stack[-1] != Map[c]:
+                return False
+            stack.pop()
+        return not stack
+
 # min stack
 # evaluate reverse polish notation
 # generate parenthesis
