@@ -436,6 +436,24 @@ class Solution:
             stack.append((t, i))
         return res
 # car fleet
+class Solution:
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        pair = [(p, s) for p, s in zip(position, speed)]
+        pair.sort(reverse=True)
+        stack = []
+
+        for p, s in pair:
+            # [(10, 2), (8, 4), (5, 1), (3, 3), (0, 1)]
+            # [1.0]
+            # [1.0, 1.0]
+            # [1.0, 7.0]
+            # [1.0, 7.0, 3.0]
+            # [1.0, 7.0, 12.0]
+            stack.append((target - p) / s)
+            if len(stack) >= 2 and stack[-1] <= stack[-2]:
+                stack.pop()
+        return len(stack)
+    
 # largest rectangle in historgram
 
 # ----- Binary Search -----
