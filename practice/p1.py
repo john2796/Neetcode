@@ -435,6 +435,7 @@ class Solution:
                 res[stackI] = i - stackI
             stack.append((t, i))
         return res
+    
 # car fleet
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
