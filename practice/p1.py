@@ -488,9 +488,75 @@ class Solution:
         return -1
 
 # search a 2d matrix
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        # matrix[0][n] > matrix[0][n-1]
+        m, n = len(matrix), len(matrix[0])
+        left, right = 0, m * n - 1
+        while left <= right:
+            mid = (left + right) // 2
+            mid_row, mid_col = divmod(mid, n)
+            if matrix[mid_row][mid_col] == target:
+                return True
+            elif matrix[mid_row][mid_col] < target:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return False
+
 # koko eating banana
+class Solution:
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        # clasic allocated books problem : https://www.algotree.org/algorithms/binary_search/allot_books/
+        l, r = 1, max(piles)
+        def isEnough(cnt):
+            return sum(ceil(i/cnt) for i in piles) <= h
+        while l < r:
+            m = (l + r) // 2
+            if isEnough(m):
+                r = m 
+            else:
+                l = m + 1
+        return l     
+    
 # find minimum in rotated sorted array
+class Solution:
+    def findMin(self, nums: List[int]) -> int:
+        l, r = 0, len(nums) - 1
+        res = float("inf")
+        while l < r:
+            m = l + ((r-l) // 2)
+            res = min(res, nums[m])
+            # right has the min
+            if nums[m] > nums[r]:
+                l = m + 1
+            else:
+                # left has the min
+                r = m - 1
+        return min(res, nums[l])
+    
 # search in rotated sorted array
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            m = l + ((r-l) // 2)
+            if nums[m] == target:
+                return m
+            # left sorted portion
+            if nums[l] <= nums[m]:
+                if target > nums[m] or target < nums[l]:
+                    l = m + 1
+                else:
+                    r = m - 1
+            # right sorted portion
+            else:
+                if target < nums[m] or target > nums[r]:
+                    r = m - 1
+                else:
+                    l = m + 1
+        return -1
+    
 # time based key value store
 # median of two sorted arrays
 
