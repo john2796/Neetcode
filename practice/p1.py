@@ -707,6 +707,24 @@ class Solution:
         return dummy.next
 
 # copy list with random pointer
+# Approach: Use a hash map to store the mapping of old nodes to new nodes and copy the list.
+# Return the head of the copied linked list.
+class Solution:
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        oldToCopy = {None: None}
+        curr = head
+        while curr:
+            copy = Node(curr.val)
+            oldToCopy[curr] = copy
+            curr = curr.next
+        curr = head
+        while curr:
+            copy = oldToCopy[curr]
+            copy.next = oldToCopy[curr.next]
+            copy.random = oldToCopy[curr.random]
+            curr = curr.next
+        return oldToCopy[head]
+    
 # add two numbers
 # linked list cycle
 # find the duplicate number
