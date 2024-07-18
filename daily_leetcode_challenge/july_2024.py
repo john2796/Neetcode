@@ -341,3 +341,33 @@ class Solution:
                 else:
                     parent.right = child
         return root
+
+# https://leetcode.com/problems/delete-nodes-and-return-forest/?envType=daily-question&envId=2024-07-17
+# Approach: Recursion (Postorder Traversal)
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        # delete nodes and return disjoint union of trees.
+        s = set(to_delete)
+        forest = []
+        root = self.dfs(root, s, forest)
+
+        # if the root is not deleted, add it to the forest
+        if root:
+            forest.append(root)
+        return forest
+
+    def dfs(self, node: TreeNode, s: Set[int], forest: List[TreeNode]) -> TreeNode:
+        if not node:
+            return None
+        node.left = self.dfs(node.left, s, forest)
+        node.right = self.dfs(node.right, s, forest)
+        # Node Evaluation: Check if the current node needs to be deleted
+        if node.val in s:
+            if node.left:
+                forest.append(node.left)
+            if node.right:
+                forest.append(node.right)
+            # delete the current node by returning none to its parent
+            return None
+        return node
+            
