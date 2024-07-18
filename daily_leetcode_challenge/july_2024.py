@@ -342,6 +342,85 @@ class Solution:
                     parent.right = child
         return root
 
+# https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/?envType=daily-question&envId=2024-07-16
+"""
+Approach BFS + DFS
+
+Intuition
+the problem requires findin the shortest path between two given nodes using step-by-step directions. Shortest path problems are common in graph theory, and several efficient algorithms can be learned to solve them. 
+"""
+class Solution:
+    def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
+        # map to store parent nodes
+        parent_map = {}
+        # find the start node and populate parent map
+        start_node = self.findStartNode(root, startValue)
+        self.populateParentMap(root, parent_map)
+
+        # perform bfs to find the path
+        q = deque([start_node])
+        seen = set()
+        # key: next node, Value: <current node, direction>
+        path_tracker = {}
+        seen.add(start_node)
+
+        while q:
+            curr = q.popleft()
+            # if destionation is reached, return the path
+            if curr.val == destValue:
+                return self.backtrack(curr, path_tracker)
+            # check and add parent node
+            if curr.val in parent_map:
+                parent_node = parent_map[curr.val]
+                if parent_node not in seen:
+                    q.append(parent_node)
+                    path_tracker[parent_node] = (curr, "U")
+                    seen.add(parent_node)
+            # check and add left child
+            if (curr.left and curr.left not in seen):
+                q.append(curr.left)
+                path_tracker[curr.left] = (curr, "L")
+                seen.add(curr.left)
+            # check and add right child
+            if (curr.right and curr.right not in seen):
+                q.append(curr.right)
+                path_tracker[curr.right] = (curr, "R")
+                seen.add(curr.right)
+        # this line should never be reached if the tree is valid
+        return ""
+    def backtrack(self, node, path_tracker):
+        path = []
+        # construct the path
+        while node in path_tracker:
+            # add the directions in reverse order and move on to the previous node
+            path.append(path_tracker[node][1])
+            node = path_tracker[node][0]
+        path.reverse()
+        return "".join(path)
+
+    def populateParentMap(self, node, parent_map):
+        if not node:
+            return None
+        # add children to the map and recurse further
+        if node.left:
+            parent_map[node.left.val] = node
+            self.populateParentMap(node.left, parent_map)
+        if node.right:
+            parent_map[node.right.val] = node
+            self.populateParentMap(node.right, parent_map)
+    
+    def findStartNode(self, node, start_value):
+        if not node:
+            return None
+        if node.val == start_value:
+            return node
+        left_result = self.findStartNode(node.left, start_value)
+        # if left subtree returns a node, it must be startnode. return it
+        # otherwise, return whatever is returned by right subtree
+        if left_result:
+            return left_result
+        return self.findStartNode(node.right, start_value)
+
 # https://leetcode.com/problems/delete-nodes-and-return-forest/?envType=daily-question&envId=2024-07-17
 # Approach: Recursion (Postorder Traversal)
 class Solution:
