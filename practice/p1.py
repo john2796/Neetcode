@@ -726,6 +726,26 @@ class Solution:
         return oldToCopy[head]
     
 # add two numbers
+class Solution:
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # Approach: Use two pointers to add digits and handle carry.
+        dummy = ListNode()
+        c = dummy
+        carry = 0
+        while l1 or l2 or carry:
+            v1 = l1.val if l1 else 0
+            v2 = l2.val if l2 else 0
+            # new digit
+            val = v1 + v2 + carry
+            carry = val // 10
+            val = val % 10
+            c.next = ListNode(val)
+            # update ptrs
+            c = c.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None 
+        return dummy.next
+
 # linked list cycle
 # find the duplicate number
 # lru cache
