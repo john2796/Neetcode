@@ -347,7 +347,7 @@ class Solution:
 Approach BFS + DFS
 
 Intuition
-the problem requires findin the shortest path between two given nodes using step-by-step directions. Shortest path problems are common in graph theory, and several efficient algorithms can be learned to solve them. 
+the problem requires finding the shortest path between two given nodes using step-by-step directions. Shortest path problems are common in graph theory, and several efficient algorithms can be learned to solve them. 
 """
 class Solution:
     def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
@@ -449,4 +449,53 @@ class Solution:
             # delete the current node by returning none to its parent
             return None
         return node
-            
+
+# https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/?envType=daily-question&envId=2024-07-18
+"""
+Return the number of good leaf node pairs in the tree
+What is a Good leaf?
+A pair of two different leaf nodes of a binary tree is said to be good if the length of the shortest path between them is less than or equal to distance
+
+Appraoch:
+graph conversion + BFS
+"""
+class Solution:
+    def traverse_tree(self, curr_node, prev_node, graph, leaf_nodes) -> int:
+        if curr_node is None:
+            return
+        if curr_node.left is None and curr_node.right is None:
+            leaf_nodes.add(curr_node)
+        if prev_node is not None:
+            if prev_node not in graph:
+                graph[prev_node] = []
+            graph[prev_node].append(curr_node)
+
+            if curr_node not in graph:
+                graph[curr_node] = []
+            graph[curr_node].append(prev_node)
+        self.traverse_tree(curr_node.left, curr_node, graph, leaf_nodes)
+        self.traverse_tree(curr_node.right, curr_node, graph, leaf_nodes)
+   
+    def countPairs(self, root, distance):
+        graph = {}
+        leaf_nodes = set()
+        self.traverse_tree(root, None, graph, leaf_nodes)
+        ans = 0
+        for leaf in leaf_nodes:
+            q = []
+            seen = set()
+            q.append(leaf)
+            seen.add(leaf)
+            for i in range(distance + 1):
+                # clear all nodes in the queue (distance i away from leaf node)
+                # add the nodes neighbhors (distance i+1 away from leaf node)
+                for j in range(len(q)):
+                    curr_node = q.pop(0)
+                    if curr_node in leaf_nodes and curr_node != leaf:
+                        ans += 1
+                    if curr_node in graph:
+                        for nei in graph.get(curr_node):
+                            q.append(nei)
+                            seen.add(nei)
+        return ans // 2
+    
