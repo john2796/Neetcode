@@ -644,8 +644,68 @@ class Solution:
         return prev
     
 # merge two sorted lists
+# return the head of the merged linked list
+class Solution:
+    def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = node = ListNode()
+        while l1 and l2:
+            if l1.val < l2.val:
+                node.next = l1
+                l1 = l1.next
+            else:
+                node.next = l2
+                l2 = l2.next
+            node = node.next
+        # if theres still value from l1 or l2 add to list
+        node.next = l1 or l2
+        return dummy.next
+    
 # reorder list
+# https://leetcode.com/problems/reorder-list/
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        # find middle
+        slow, fast = head, head.next
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        # reverse second half
+        second = slow.next
+        prev = slow.next = None
+        while second:
+            tmp = second.next
+            second.next = prev
+            prev = second
+            second = tmp
+        # merge two halfs
+        first, second = head, prev
+        while second:
+            tmp1, tmp2 = first.next, second.next
+            first.next = second
+            second.next = tmp1
+            first, second = tmp1, tmp2
+
 # remove nth node from end of list
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        dummy = ListNode(0, head)
+        left = dummy
+        right = head
+        while n > 0:
+            right = right.next 
+            n -= 1
+        while right:
+            left = left.next
+            right = right.next
+        # delete node
+        left.next = left.next.next
+        return dummy.next
+
 # copy list with random pointer
 # add two numbers
 # linked list cycle
