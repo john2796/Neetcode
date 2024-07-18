@@ -460,7 +460,7 @@ Appraoch:
 graph conversion + BFS
 """
 class Solution:
-    def traverse_tree(self, curr_node, prev_node, graph, leaf_nodes) -> int:
+    def traverse_tree(self, curr_node, prev_node, graph, leaf_nodes):
         if curr_node is None:
             return
         if curr_node.left is None and curr_node.right is None:
@@ -473,9 +473,10 @@ class Solution:
             if curr_node not in graph:
                 graph[curr_node] = []
             graph[curr_node].append(prev_node)
+
         self.traverse_tree(curr_node.left, curr_node, graph, leaf_nodes)
         self.traverse_tree(curr_node.right, curr_node, graph, leaf_nodes)
-   
+
     def countPairs(self, root, distance):
         graph = {}
         leaf_nodes = set()
@@ -487,15 +488,17 @@ class Solution:
             q.append(leaf)
             seen.add(leaf)
             for i in range(distance + 1):
-                # clear all nodes in the queue (distance i away from leaf node)
-                # add the nodes neighbhors (distance i+1 away from leaf node)
-                for j in range(len(q)):
+                # Clear all nodes in the queue (distance i away from leaf node)
+                # Add the nodes' neighbors (distance i+1 away from leaf node)
+                size = len(q)
+                for j in range(size):
                     curr_node = q.pop(0)
                     if curr_node in leaf_nodes and curr_node != leaf:
                         ans += 1
                     if curr_node in graph:
                         for nei in graph.get(curr_node):
-                            q.append(nei)
-                            seen.add(nei)
+                            if nei not in seen:
+                                q.append(nei)
+                                seen.add(nei)
         return ans // 2
     
