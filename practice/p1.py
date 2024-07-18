@@ -747,10 +747,113 @@ class Solution:
         return dummy.next
 
 # linked list cycle
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        # Approach: Use two pointers to detect if a cycle exists in the list.
+        slow, fast = head, head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+    
 # find the duplicate number
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        # Approach: Use Floyd's Tortoise and Hare (Cycle Detection) to find the duplicate number.
+        slow, fast = 0, 0
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast:
+                break
+        slow2 = 0
+        while True:
+            slow = nums[slow]
+            slow2 = nums[slow2]
+            if slow == slow2:
+                return slow
+
 # lru cache
+# Approach: Use a hash map and a doubly linked list to implement LRU cache.
+# Problem: LRU least recently used cache
+class Node:
+    def __init__(self, key, val):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache = {} # map key to node
+
+        self.left, self.right = Node(0, 0), Node(0, 0)
+        self.left.next, self.right.prev = self.right, self.left
+    
+    def remove(self, node):
+        prev, nxt = node.prev, node.next
+        prev.next, nxt.prev = nxt, prev
+    
+    def insert(self, node):
+        prev, nxt = self.right.prev, self.right
+        prev.next = nxt.prev = node
+        node.next, node.prev = nxt, prev
+
+    def get(self, key: int) -> int:
+        if key in self.cache:
+            self.remove(self.cache[key])
+            self.insert(self.cache[key])
+            return self.cache[key].val
+        return -1
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self.remove(self.cache[key])
+        self.cache[key] = Node(key, value)
+        self.insert(self.cache[key])
+
+        if len(self.cache) > self.cap:
+            # remove from the list and delete the LRU from hashmap
+            lru = self.left.next
+            self.remove(lru)
+            del self.cache[lru.key]
+# Your LRUCache object will be instantiated and called as such:
+# obj = LRUCache(capacity)
+# param_1 = obj.get(key)
+# obj.put(key,value)
+            
+
 # merge k sorted lists
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+# Approach: Use a priority queue (min-heap) to merge k sorted linked lists.
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        # create an empty heap
+        heap = []
+        for l in lists:
+            pointer = l 
+            # traverse the current linked list and push each node's value onto the heap
+            while pointer:
+                heappush(heap, pointer.val)
+                pointer = pointer.next
+        # create a dummy node to serve as the head of the merged linked list
+        head = ListNode(0)
+        cur = head
+        # pop values from the heap and create nodes in the merged linked list
+        while len(heap) != 0:
+            cur.next = ListNode(heappop(heap))
+            cur = cur.next
+        # return the next node of the dummy node, which is the head of the meregd linked list
+        return head.next
+
 # reverse nodes in k group
+            
 
 # ----- Trees
 # invert binary tree
