@@ -450,6 +450,7 @@ class Solution:
             return None
         return node
 
+<<<<<<< HEAD
 # https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/?envType=daily-question&envId=2024-07-18
 """
 Return the number of good leaf node pairs in the tree
@@ -502,3 +503,22 @@ class Solution:
                                 seen.add(nei)
         return ans // 2
     
+=======
+# https://leetcode.com/problems/lucky-numbers-in-a-matrix/?envType=daily-question&envId=2024-07-19
+class Solution:
+    def luckyNumbers (self, matrix: List[List[int]]) -> List[int]:
+        N, M = len(matrix), len(matrix[0])
+        r_min_max = float("-inf")
+        for i in range(N):
+            r_min = min(matrix[i])
+            r_min_max = max(r_min_max, r_min)
+        c_max_min = float("inf")
+        for i in range(M):
+            c_max = max(matrix[j][i] for j in range(N))
+            c_max_min = min(c_max_min, c_max)
+        if r_min_max == c_max_min:
+            return [r_min_max]
+        else:
+            return []
+          
+>>>>>>> a4360c3 (luckyNumbers)
