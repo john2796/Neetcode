@@ -450,7 +450,6 @@ class Solution:
             return None
         return node
 
-<<<<<<< HEAD
 # https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/?envType=daily-question&envId=2024-07-18
 """
 Return the number of good leaf node pairs in the tree
@@ -503,7 +502,6 @@ class Solution:
                                 seen.add(nei)
         return ans // 2
     
-=======
 # https://leetcode.com/problems/lucky-numbers-in-a-matrix/?envType=daily-question&envId=2024-07-19
 class Solution:
     def luckyNumbers (self, matrix: List[List[int]]) -> List[int]:
@@ -521,4 +519,27 @@ class Solution:
         else:
             return []
           
->>>>>>> a4360c3 (luckyNumbers)
+
+# https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
+class Solution:
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        # Greedy
+        rows, cols = len(rowSum), len(colSum)
+
+        curr_row_sum = [0] * rows
+        curr_col_sum = [0] * cols
+
+        orig_matrix = [[0] * rows for _ in range(cols)] # [[0, 0], [0, 0]]
+        for r in range(rows):
+            for c in range(cols):
+                # print(rowSum[r] , curr_row_sum[r], colSum[c] , curr_col_sum[c])
+                # 3 0 4 0
+                # 3 3 7 0
+                # 8 0 4 3
+                # 8 1 7 0
+                orig_matrix[r][c] = min(
+                    rowSum[r] - curr_row_sum[r], colSum[c] - curr_col_sum[c]
+                )
+                curr_row_sum[r] += orig_matrix[r][c]
+                curr_col_sum[c] += orig_matrix[r][c]
+        return orig_matrix
