@@ -88,22 +88,20 @@ Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
 class Solution:
     def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         res = []
+        subset = []
         nums.sort()
-        def backtrack(i, subset):
-            # base
-            if i == len(nums):
-                res.append(subset[::]) # copy
-                return             
-            # include
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset.copy())
+                return
             subset.append(nums[i])
-            backtrack(i + 1, subset)
-            # don't include
+            dfs(i + 1)
+
             subset.pop()
-            # condition
             while i + 1 < len(nums) and nums[i] == nums[i + 1]:
                 i += 1
-            backtrack(i + 1, subset)
-        backtrack(0, [])
+            dfs(i + 1)
+        dfs(0)
         return res
 
 # Combination Sum II
@@ -126,25 +124,28 @@ Output:
 """
 class Solution:
     def combinationSum2(self, c: List[int], t: int) -> List[List[int]]:
-        c.sort()
-        res = []
+        c.sort() # sort the candidates to handle duplicates efficiently
+        res = [] # list to store the resulting combination
         def bactrack(cur, pos, target):
             if target == 0:
-                res.append(cur.copy())
+                # if target is achieved (sum of current combination is t), add it to the result
+                res.append(cur.copy()) # make a copy of current combination and add to result
                 return
             if target <= 0:
+                # if target is less than 0, stop further processing (invalid path)
                 return
 
-            prev = -1
+            prev = -1 # variable to keep track of the previous element to handle duplicates
             for i in range(pos, len(c)):
                 if c[i] == prev:
+                    # skip duplicates at the same level to avoid duplicate combinations
                     continue
-                cur.append(c[i])
-                bactrack(cur, i + 1, target - c[i])
-                cur.pop()
-                prev = c[i]
-        bactrack([], 0, t)
-        return res
+                cur.append(c[i]) # choose current element c[i] and add to current combination
+                bactrack(cur, i + 1, target - c[i]) # recursively call backtrack with updated parameters
+                cur.pop() # backtrack: remove the last element to backtrack
+                prev = c[i] # update prev to current element c[i] for the next iteration
+        bactrack([], 0, t) # start backtrack with an empty current combination, starting position 0, and target t
+        return res # return the resulting combinations
     
 # Word Search
 """
@@ -214,13 +215,13 @@ class Solution:
                 res.append(part.copy())
                 return
             for j in range(i, len(s)):
-                if self.isPalindrome(s, i ,j):
+                if self.isPali(s, i, j):
                     part.append(s[i : j + 1])
                     dfs(j + 1)
-                    part.copy()
+                    part.pop()
         dfs(0)
         return res
-    def isPalindrome(self, s, l, r):
+    def isPali(self, s, l, r):
         while l < r:
             if s[l] != s[r]:
                 return False

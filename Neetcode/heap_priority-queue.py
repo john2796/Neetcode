@@ -31,12 +31,12 @@ class Solution:
     def lastStoneWeight(self, stones: List[int]) -> int:
         stones = [-s for s in stones]
         heapq.heapify(stones)
-
+        # print(stones) [-8, -7, -4, -1, -2, -1]
         while len(stones) > 1:
-            first = heapq.heappop(stones)
-            second = heapq.heappop(stones)
-            if second > first:
-                heapq.heappush(stones, first - second)
+            x = heapq.heappop(stones)
+            y = heapq.heappop(stones)
+            if y > x:
+                heapq.heappush(stones, x - y)
         stones.append(0)
         return abs(stones[0])
 
@@ -46,29 +46,31 @@ class Solution:
 class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
         minHeap = []
-        for x, y in points:
-            dist = (x ** 2) + (y ** 2) # this formula will be used for proper heapify order of the list
+        for x,y in points:
+            dist = (x ** 2) + (y ** 2)
             minHeap.append((dist, x, y))
         heapq.heapify(minHeap)
-        res=[]
+        # print(minHeap) [(8, -2, 2), (10, 1, 3)]
+        res = []
         for _ in range(k):
             _, x, y = heapq.heappop(minHeap)
+            # print((x, y)) (-2, 2)
             res.append((x, y))
-
-
+        # print(res) [(-2, 2)]
+        return res
 
 # 215. Kth Largest Element in the Array
-
-# Solution: Sorting
-# Time Complexity:
-#   - Best Case: O(n)
-#   - Average Case: O(n*log(n))
-#   - Worst Case: O(n*log(n))
 class Solution:
     def findKthLargest(self, nums: List[int], k: int) -> int:
-        nums.sort()
-        return nums[len(nums) - k]
+        heap = nums[:k]
+        heapq.heapify(heap)
+        # print(heap) [2, 3]
 
+        for num in nums[k:]:
+            if num > heap[0]:
+                heapq.heappop(heap)
+                heapq.heappush(heap, num)
+        return heap[0]
 # Solution : QucikSelect
 # Time Complexity:
 #  - Best Case: O(n)
