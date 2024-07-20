@@ -521,25 +521,23 @@ class Solution:
           
 
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
+# https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
 class Solution:
     def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
-        # Greedy
-        rows, cols = len(rowSum), len(colSum)
+        N = len(rowSum)
+        M = len(colSum)
 
-        curr_row_sum = [0] * rows
-        curr_col_sum = [0] * cols
+        curr_row_sum = [0] * N
+        curr_col_sum = [0] * M
 
-        orig_matrix = [[0] * rows for _ in range(cols)] # [[0, 0], [0, 0]]
-        for r in range(rows):
-            for c in range(cols):
-                # print(rowSum[r] , curr_row_sum[r], colSum[c] , curr_col_sum[c])
-                # 3 0 4 0
-                # 3 3 7 0
-                # 8 0 4 3
-                # 8 1 7 0
-                orig_matrix[r][c] = min(
-                    rowSum[r] - curr_row_sum[r], colSum[c] - curr_col_sum[c]
+        orig_matrix = [[0] * M for _ in range(N)]
+        for i in range(N):
+            for j in range(M):
+                orig_matrix[i][j] = min(
+                    rowSum[i] - curr_row_sum[i], colSum[j] - curr_col_sum[j]
                 )
-                curr_row_sum[r] += orig_matrix[r][c]
-                curr_col_sum[c] += orig_matrix[r][c]
+
+                curr_row_sum[i] += orig_matrix[i][j]
+                curr_col_sum[j] += orig_matrix[i][j]
+
         return orig_matrix
