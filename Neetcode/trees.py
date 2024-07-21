@@ -27,7 +27,7 @@ class Solution:
             self.maxDepth_recursive_DFS(root.left),
             self.maxDepth_recursive_DFS(root.right),
         )
-
+  
 
 # Iterative DFS (template)
 class Solution:
@@ -101,7 +101,6 @@ class Solution:
             return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
         else:
             return False
-       self.right = right
 
 class Solution:
     def isSubtree(self, r: Optional[TreeNode], s: Optional[TreeNode]) -> bool:

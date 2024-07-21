@@ -518,9 +518,13 @@ class Solution:
             return [r_min_max]
         else:
             return []
+<<<<<<< HEAD
           
 
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
+=======
+        
+>>>>>>> 89359b8 (daily practice trie and graph)
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
 class Solution:
     def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
@@ -540,4 +544,76 @@ class Solution:
                 curr_row_sum[i] += orig_matrix[i][j]
                 curr_col_sum[j] += orig_matrix[i][j]
 
+<<<<<<< HEAD
         return orig_matrix
+=======
+        return orig_matrix
+     
+# https://leetcode.com/problems/build-a-matrix-with-conditions/description/?envType=daily-question&envId=2024-07-21
+class Solution:
+    def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
+        # dfs + topological sort
+        # store the topologically sorted sequence
+        order_rows = self.topoSort(rowConditions, k)
+        order_cols = self.topoSort(colConditions, k)
+
+        # if no topological sort exists return empty array
+        if not order_rows or not order_cols:
+            return []
+        matrix = [[0] * k for _ in range(k)]
+        pos_row = {num: i for i, num in enumerate(order_rows)}
+        pos_col = {num: i for i, num in enumerate(order_cols)}
+
+        for num in range(1, k + 1):
+            if num in pos_row and num in pos_col:
+                matrix[pos_row[num]][pos_col[num]] = num
+        return matrix
+
+    def topoSort(self, edges: List[List[int]], n: int) -> List[int]:
+        adj = defaultdict(list)
+        order = []
+        visited = [0] * (n + 1)
+        has_cycle = [False]
+
+        # build adjacency list
+        for x, y in edges:
+            adj[x].append(y)
+        # perform dfs for each node
+        for i in range(1, n + 1):
+            if visited[i] == 0:
+                self.dfs(i, adj, visited, order, has_cycle)
+                # return empty if cycle detected
+                if has_cycle[0]:
+                    return []
+        # reverse to get the correct order
+        order.reverse()
+        return order
+
+    def dfs(self, node: int, adj: defaultdict, visited: List[int], order: List[int], has_cycle: List[bool]):
+        # mark node as visiting
+        visited[node] = 1
+        for nei in adj[node]:
+            if visited[nei] == 0:
+                self.dfs(nei,adj,visited,order,has_cycle)
+                # early exit if a cycle is detected
+                if has_cycle[0]:
+                    return
+            elif visited[nei] == 1:
+                # cycle detected
+                has_cycle[0] = True
+                return
+        # mark node as visited
+        visited[node] = 2
+        # add node to the order
+        order.append(node)
+
+
+
+
+
+
+
+
+
+
+>>>>>>> 89359b8 (daily practice trie and graph)

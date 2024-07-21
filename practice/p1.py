@@ -917,13 +917,266 @@ class Solution:
 
 # ----- Tries
 # implement trie prefix
+class TrieNode:
+    def __init__(self):
+        self.children = [None] * 26
+        self.end = False
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, words: str) -> None:
+        curr = self.root
+        for c in words:
+            i = ord("a") - ord(c)
+            if curr.children[i] == None:
+                curr.children[i] = TrieNode()
+            curr = curr.children[i]
+        curr.end = True
+
+    def search(self, words: str) -> bool:
+        curr = self.root
+        for c in words:
+            i = ord("a") - ord(c)
+            if curr.children[i] == None:
+                return False
+            curr = curr.children[i] 
+        return curr.end
+
+    def startsWith(self, prefix) -> bool:
+        curr = self.root
+        for c in prefix:
+            i = ord("a") - ord(c)
+            if curr.children[i] == None:
+                return False
+            curr = curr.children[i]
+        return True
+
 # design add and search words data
+"""
+design data structure that supports adding new words and finding if a string matches previously added string
+
+Input:
+["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+[[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+Output:
+[null,null,null,null,false,true,true,true]
+"""
+class TrieNode:
+    def __init__(self):
+        self.children = {}  # a : TrieNode
+        self.word = False
+
+class WordDictionary:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def addWord(self, word: str) -> None:
+        cur = self.root
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+        cur.word = True
+
+    def search(self, word: str) -> bool:
+        def dfs(j, root):
+            cur = root
+
+            for i in range(j, len(word)):
+                c = word[i]
+                if c == ".":
+                    for child in cur.children.values():
+                        if dfs(i + 1, child):
+                            return True
+                    return False
+                else:
+                    if c not in cur.children:
+                        return False
+                    cur = cur.children[c]
+            return cur.word
+
+        return dfs(0, self.root)
+
 # word search II
+"""
+return all the word from the board 
+
+Input: board = 
+[["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+
+Output: ["eat","oath"]
+"""
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.isWord = False
+        self.refs = 0
+
+    def addWord(self, word):
+        cur = self
+        cur.refs += 1
+        for c in word:
+            if c not in cur.children:
+                cur.children[c] = TrieNode()
+            cur = cur.children[c]
+            cur.refs += 1
+        cur.isWord = True
+
+    def removeWord(self, word):
+        cur = self
+        cur.refs -= 1
+        for c in word:
+            if c in cur.children:
+                cur = cur.children[c]
+                cur.refs -= 1
+
+class Solution:
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        # dfs + trie
+        root = TrieNode()
+        for w in words:
+            root.addWord(w)
+
+        rows, cols = len(board), len(board[0])
+        res, visit = set(), set()
+
+        def dfs(r, c, node, word):
+            if (
+                r not in range(rows)
+                or c not in range(cols)
+                or board[r][c] not in node.children
+                or node.children[board[r][c]].refs < 1
+                or (r, c) in visit
+            ):
+                return
+            visit.add((r, c))
+            node = node.children[board[r][c]]
+            word += board[r][c]
+            if node.isWord:
+                node.isWord = False
+                res.add(word)
+                root.removeWord(word)
+            dfs(r + 1, c, node, word)
+            dfs(r - 1, c, node, word)
+            dfs(r, c + 1, node, word)
+            dfs(r, c - 1, node, word)
+            visit.remove((r, c))
+
+        for r in range(rows):
+            for c in range(cols):
+                dfs(r, c, root, "")
+        return list(res)
 
 # ----- Graphs
 # number of islands
+"""
+Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+
+An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+Example 1:
+Input: grid = [
+  ["1","1","1","1","0"],
+  ["1","1","0","1","0"],
+  ["1","1","0","0","0"],
+  ["0","0","0","0","0"]
+]
+Output: 1
+"""
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        visit = set()
+        def dfs(r, c):
+            if (
+                r not in range(rows)
+                or c not in range(cols) 
+                or grid[r][c] == "0"
+                or (r, c) in visit
+            ):
+                return False
+            visit.add((r, c))
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+            return True
+
+        island = 0
+        for r in range(rows):
+            for c in range(cols):
+                if dfs(r, c):
+                    island += 1
+        return island
+
+
 # max area of island
+"""
+You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+
+The area of an island is the number of cells with a value 1 in the island.
+
+Return the maximum area of an island in grid. If there is no island, return 0.
+"""
+class Solution:
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        visit = set()
+
+        def dfs(r, c):
+            if (
+                r not in range(rows)
+                or c not in range(cols)
+                or grid[r][c] == 0
+                or (r, c) in visit
+            ):
+                return 0
+            visit.add((r, c))
+            return 1 + dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
+        area = 0
+        for r in range(rows):
+            for c in range(cols):
+                area = max(area, dfs(r, c)) 
+        return area
+
 # clone graph
+"""
+Given a reference of a node in a connected undirected graph.
+Return a deep copy (clone) of the graph.
+Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors.
+class Node {
+    public int val;
+    public List<Node> neighbors;
+}
+ 
+Test case format:
+For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with val == 1, the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list.
+An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of neighbors of a node in the graph.
+The given node will always be the first node with val = 1. You must return the copy of the given node as a reference to the cloned graph.
+
+Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+Output: [[2,4],[1,3],[2,4],[1,3]]
+Explanation: There are 4 nodes in the graph.
+1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+"""
+class Solution:
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        oldToNew = {}
+        def dfs(node):
+            if node in oldToNew:
+                return oldToNew[node]
+            copy = Node(node.val)
+            oldToNew[node] = copy
+            for nei in node.neighbors:
+                copy.neighbors.append(dfs(nei))
+            return copy
+        return dfs(node) if node else None
+        
+
 # walls and gates
 # rotting oranges
 # pacific atlantic water flow

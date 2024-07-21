@@ -68,8 +68,6 @@ Output
 [null,null,null,null,false,true,true,true]
 
 """
-
-
 class TrieNode2:
     def __init__(self):
         self.children = {}  # a : TrieNode
@@ -105,8 +103,6 @@ class WordDictionary:
             return cur.word
 
         return dfs(0, self.root)
-
-
 """
 212. Word Search II
 given m x n board of characters and list of strings words, return all words of the board
@@ -143,6 +139,7 @@ class TrieNode3:
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        # dfs + trie 
         root = TrieNode3()
         for w in words:
             root.addWord(w)
