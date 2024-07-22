@@ -544,12 +544,9 @@ class Solution:
                 curr_row_sum[i] += orig_matrix[i][j]
                 curr_col_sum[j] += orig_matrix[i][j]
 
-<<<<<<< HEAD
-        return orig_matrix
-=======
         return orig_matrix
      
-# https://leetcode.com/problems/build-a-matrix-with-conditions/description/?envType=daily-question&envId=2024-07-21
+ # https://leetcode.com/problems/build-a-matrix-with-conditions/description/?envType=daily-question&envId=2024-07-21
 class Solution:
     def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
         # dfs + topological sort
@@ -607,13 +604,14 @@ class Solution:
         # add node to the order
         order.append(node)
 
-
-
-
-
-
-
-
-
-
->>>>>>> 89359b8 (daily practice trie and graph)
+# https://leetcode.com/problems/sort-the-people/?envType=daily-question&envId=2024-07-22
+class Solution:
+    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
+        # (height, name)
+        nh = [(-h, n) for h, n in zip(heights, names)] 
+        heapq.heapify(nh)
+        res = []
+        while nh:
+            height, name  = heapq.heappop(nh)
+            res.append(name)
+        return res
