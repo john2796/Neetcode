@@ -1177,7 +1177,7 @@ class Solution:
             return copy
         return dfs(node) if node else None
 
-# walls and gates
+# walls and gates (premium problem)
 # rotting oranges
 # pacific atlantic water flow
 # surrounded regions

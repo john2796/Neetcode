@@ -203,7 +203,7 @@ def solve(self, board: List[List[int]]) -> None:
 
 # Course Schedule
 def canFinish(self, numCourses: int, prerequisites: List[List[[int]]]) -> bool:
-    # dfs
+    # adjcency list + dfs mark visited check neighbors
     preMap = {i: [] for i in range(numCourses)}
     
     # adjacency_list, map each course to : prereq list
