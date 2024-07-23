@@ -518,13 +518,9 @@ class Solution:
             return [r_min_max]
         else:
             return []
-<<<<<<< HEAD
           
 
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
-=======
-        
->>>>>>> 89359b8 (daily practice trie and graph)
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
 class Solution:
     def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
@@ -615,3 +611,25 @@ class Solution:
             height, name  = heapq.heappop(nh)
             res.append(name)
         return res
+    
+# https://leetcode.com/problems/sort-array-by-increasing-frequency/?envType=daily-question&envId=2024-07-23
+class Solution:
+    def frequencySort(self, nums: List[int]) -> List[int]:
+        # frequency + heap
+        d={}
+        for i in range(len(nums)):
+            if nums[i] in d:
+                d[nums[i]] += 1
+            else:
+                d[nums[i]] = 1
+        heap=[]
+        arr=[]
+        for i in d:
+            heappush(heap, [d[i], -i])
+        print(heap)
+
+        while heap:
+            m,n = heapq.heappop(heap)
+            for i in range(m):
+                arr.append(n*(-1))
+        return arr
