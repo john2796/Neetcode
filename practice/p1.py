@@ -1165,6 +1165,7 @@ Explanation: There are 4 nodes in the graph.
 """
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        # return a deep copy (clone) of the graph
         oldToNew = {}
         def dfs(node):
             if node in oldToNew:
@@ -1175,7 +1176,6 @@ class Solution:
                 copy.neighbors.append(dfs(nei))
             return copy
         return dfs(node) if node else None
-        
 
 # walls and gates
 # rotting oranges
