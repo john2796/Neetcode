@@ -633,3 +633,49 @@ class Solution:
             for i in range(m):
                 arr.append(n*(-1))
         return arr
+
+
+# https://leetcode.com/problems/sort-the-jumbled-numbers/?envType=daily-question&envId=2024-07-24
+"""
+Input: mapping = [8,9,4,0,2,1,3,5,7,6], nums = [991,338,38]
+Output: [338,38,991]
+
+input digit list  [ 0, 1 ,2, 3, 4, 5, 6, 7, 8, 9 ]
+mapped digit list [ 8, 9, 4, 0, 2, 1, 3, 5, 7, 6]
+
+convert to string and chanage each digit to:
+ 991 -> 669
+ 339 -> 007
+ 38 ->  07
+
+ nums = [991, 338, 38]
+ Add the pairs in storePairs
+ store_pairs = [{669: 0}, {7:1}, {7:2}]
+ sorted_pairs = [{7:1}, {7:2}, {669: 0}]
+
+ indices are in the order 1 -> 2 -> 0
+ Add these nums values at the given indices in an array and return
+
+ return [338, 38, 991]
+"""
+class Solution:
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        # conversion using strings and sorting
+        store_pairs = []
+
+        for i in range(len(nums)):
+            # convert current value to string
+            number = str(nums[i])
+            formed = ""
+            for j in range(len(number)):
+                formed = formed + str(mapping[int(number[j])])
+            # store the mapped value
+            mapped_value = int(formed)
+            # push a pair consisting of mapped value and original value's index.
+            store_pairs.append((mapped_value, i))
+        # sort the array in non-decreasing order by the first value (default)
+        store_pairs.sort()
+        answer = []
+        for pair in store_pairs:
+            answer.append(nums[pair[1]])
+        return answer
