@@ -1,6 +1,27 @@
 # https://leetcode.com/problems/reconstruct-itinerary/description/
 # Reconstruct Itinerary
 """
+The problem asks you to reconstruct a trip's itinerary given a list of airline tickets
+You start from JFK airport, and if there are mutilple valid itineraries, you should return the one that has the smallest lexical order.
+
+1. Recursive dfs:
+This approach leverages the stack memory implicitly during recursion to backtrack and form the itinerary
+"""
+
+class Solution1:
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        graph = defaultdict(list)
+        for src, dst in sorted(tickets, reverse=True):
+            graph[src].append(dst)
+        itinerary = [] 
+        def dfs(airport):
+            while graph[airport]:
+                dfs(graph[airport].pop())
+            itinerary.append(airport)
+        dfs("JFK")
+        return itinerary[::-1]
+
+"""
 Input: tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]
 Output: ["JFK","MUC","LHR","SFO","SJC"]
 """
