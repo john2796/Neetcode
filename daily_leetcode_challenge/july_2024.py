@@ -342,6 +342,7 @@ class Solution:
                     parent.right = child
         return root
 
+
 # https://leetcode.com/problems/step-by-step-directions-from-a-binary-tree-node-to-another/?envType=daily-question&envId=2024-07-16
 """
 Approach BFS + DFS
@@ -349,8 +350,12 @@ Approach BFS + DFS
 Intuition
 the problem requires finding the shortest path between two given nodes using step-by-step directions. Shortest path problems are common in graph theory, and several efficient algorithms can be learned to solve them. 
 """
+
+
 class Solution:
-    def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
+    def getDirections(
+        self, root: Optional[TreeNode], startValue: int, destValue: int
+    ) -> str:
         # map to store parent nodes
         parent_map = {}
         # find the start node and populate parent map
@@ -377,17 +382,18 @@ class Solution:
                     path_tracker[parent_node] = (curr, "U")
                     seen.add(parent_node)
             # check and add left child
-            if (curr.left and curr.left not in seen):
+            if curr.left and curr.left not in seen:
                 q.append(curr.left)
                 path_tracker[curr.left] = (curr, "L")
                 seen.add(curr.left)
             # check and add right child
-            if (curr.right and curr.right not in seen):
+            if curr.right and curr.right not in seen:
                 q.append(curr.right)
                 path_tracker[curr.right] = (curr, "R")
                 seen.add(curr.right)
         # this line should never be reached if the tree is valid
         return ""
+
     def backtrack(self, node, path_tracker):
         path = []
         # construct the path
@@ -408,7 +414,7 @@ class Solution:
         if node.right:
             parent_map[node.right.val] = node
             self.populateParentMap(node.right, parent_map)
-    
+
     def findStartNode(self, node, start_value):
         if not node:
             return None
@@ -421,10 +427,13 @@ class Solution:
             return left_result
         return self.findStartNode(node.right, start_value)
 
+
 # https://leetcode.com/problems/delete-nodes-and-return-forest/?envType=daily-question&envId=2024-07-17
 # Approach: Recursion (Postorder Traversal)
 class Solution:
-    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+    def delNodes(
+        self, root: Optional[TreeNode], to_delete: List[int]
+    ) -> List[TreeNode]:
         # delete nodes and return disjoint union of trees.
         s = set(to_delete)
         forest = []
@@ -450,6 +459,7 @@ class Solution:
             return None
         return node
 
+
 # https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/?envType=daily-question&envId=2024-07-18
 """
 Return the number of good leaf node pairs in the tree
@@ -459,6 +469,8 @@ A pair of two different leaf nodes of a binary tree is said to be good if the le
 Appraoch:
 graph conversion + BFS
 """
+
+
 class Solution:
     def traverse_tree(self, curr_node, prev_node, graph, leaf_nodes):
         if curr_node is None:
@@ -501,10 +513,11 @@ class Solution:
                                 q.append(nei)
                                 seen.add(nei)
         return ans // 2
-    
+
+
 # https://leetcode.com/problems/lucky-numbers-in-a-matrix/?envType=daily-question&envId=2024-07-19
 class Solution:
-    def luckyNumbers (self, matrix: List[List[int]]) -> List[int]:
+    def luckyNumbers(self, matrix: List[List[int]]) -> List[int]:
         N, M = len(matrix), len(matrix[0])
         r_min_max = float("-inf")
         for i in range(N):
@@ -518,7 +531,7 @@ class Solution:
             return [r_min_max]
         else:
             return []
-          
+
 
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
 # https://leetcode.com/problems/find-valid-matrix-given-row-and-column-sums/?envType=daily-question&envId=2024-07-20
@@ -541,10 +554,13 @@ class Solution:
                 curr_col_sum[j] += orig_matrix[i][j]
 
         return orig_matrix
-     
- # https://leetcode.com/problems/build-a-matrix-with-conditions/description/?envType=daily-question&envId=2024-07-21
+
+
+# https://leetcode.com/problems/build-a-matrix-with-conditions/description/?envType=daily-question&envId=2024-07-21
 class Solution:
-    def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
+    def buildMatrix(
+        self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]
+    ) -> List[List[int]]:
         # dfs + topological sort
         # store the topologically sorted sequence
         order_rows = self.topoSort(rowConditions, k)
@@ -582,12 +598,19 @@ class Solution:
         order.reverse()
         return order
 
-    def dfs(self, node: int, adj: defaultdict, visited: List[int], order: List[int], has_cycle: List[bool]):
+    def dfs(
+        self,
+        node: int,
+        adj: defaultdict,
+        visited: List[int],
+        order: List[int],
+        has_cycle: List[bool],
+    ):
         # mark node as visiting
         visited[node] = 1
         for nei in adj[node]:
             if visited[nei] == 0:
-                self.dfs(nei,adj,visited,order,has_cycle)
+                self.dfs(nei, adj, visited, order, has_cycle)
                 # early exit if a cycle is detected
                 if has_cycle[0]:
                     return
@@ -600,38 +623,40 @@ class Solution:
         # add node to the order
         order.append(node)
 
+
 # https://leetcode.com/problems/sort-the-people/?envType=daily-question&envId=2024-07-22
 class Solution:
     def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
         # (height, name)
-        nh = [(-h, n) for h, n in zip(heights, names)] 
+        nh = [(-h, n) for h, n in zip(heights, names)]
         heapq.heapify(nh)
         res = []
         while nh:
-            height, name  = heapq.heappop(nh)
+            height, name = heapq.heappop(nh)
             res.append(name)
         return res
-    
+
+
 # https://leetcode.com/problems/sort-array-by-increasing-frequency/?envType=daily-question&envId=2024-07-23
 class Solution:
     def frequencySort(self, nums: List[int]) -> List[int]:
         # frequency + heap
-        d={}
+        d = {}
         for i in range(len(nums)):
             if nums[i] in d:
                 d[nums[i]] += 1
             else:
                 d[nums[i]] = 1
-        heap=[]
-        arr=[]
+        heap = []
+        arr = []
         for i in d:
             heappush(heap, [d[i], -i])
         print(heap)
 
         while heap:
-            m,n = heapq.heappop(heap)
+            m, n = heapq.heappop(heap)
             for i in range(m):
-                arr.append(n*(-1))
+                arr.append(n * (-1))
         return arr
 
 
@@ -658,6 +683,8 @@ convert to string and change each digit to:
 
  return [338, 38, 991]
 """
+
+
 class Solution:
     def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
         # conversion using strings and sorting
@@ -679,3 +706,31 @@ class Solution:
         for pair in store_pairs:
             answer.append(nums[pair[1]])
         return answer
+
+
+# https://leetcode.com/problems/sort-an-array/?envType=daily-question&envId=2024-07-25
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        # binary search + quick sort
+        def quick_sort(left, right):
+            if left >= right:
+                return
+            pivot = nums[randint(left, right)]
+            l, r, cur = left - 1, right + 1, left
+
+            while cur < r:
+                if nums[cur] < pivot:
+                    l += 1
+                    nums[l], nums[cur] = nums[cur], nums[l]
+                    cur += 1
+                elif nums[cur] > pivot:
+                    r -= 1
+                    nums[r], nums[cur] = nums[cur], nums[r]
+                else:
+                    cur += 1
+
+            quick_sort(left, l)
+            quick_sort(r, right)
+
+        quick_sort(0, len(nums) - 1)
+        return nums
