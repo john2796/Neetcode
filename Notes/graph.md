@@ -199,3 +199,33 @@ graph = [
 ]
 floyd_warshall(graph)
 ```
+
+Four graph algorithm solution:
+
+## Dijkstra's Algorithm
+
+Dijkstra's algorithm is a graph search algorithm that finds the shortest paths between nodes in a graph. It is particularly effective for find the the shortest path from a single source node to all other nodes in graph with non-negative edge weights.
+
+The algorithm uses a greedy strategy, maintaining a set of vertices whose shortest distance from the source is known. At each step, it selects the vertex with the minimum distance value from the set of unvisited vertices.
+
+We initialize distances to all vertices as infinity, except for the source vertex, which is set to zero. A priority queue is used to efficiently select the vertex with the minimum distance in each iteration, ensuring that the most promising paths are processed first and saving unnecessary computations.
+
+For each neighbor of the current vertex, we calculate the distance through the current vertex. If this calculated distance is less than the previously known distance to that neighbor, the distance is updated - a process known as relaxation. Dijkstra's algorithm performs relaxation efficiently by always processing the most promising vertex next.
+
+## Bellman-Ford Algorithm
+
+The Bellman-Ford algorithm is a graph search algorithm that finds the shortest paths from a single source vertex to all other vertices in a weighted graph. Unlike Dijkstra's algorithm, Bellman-Form can handle graphs with negative edge weights, making it more versatile but potentially slower.
+
+## Shortest Path First Algorithm (SPFA)
+
+The Shortest Path Faster Algorithm (SPFA) is an improvement of the Bellman-Ford algorithm, designed to work faster on average, especiall for sparse graphs, while still handling negative edge weights.
+
+SPFA starts similarly to Bellman-Ford by initializing all distances to infinity except for the source vertex. However, instead of blindly relaxing all edges in each iteration, SPFA uses a queue to keep track of which vertices need to be processed. We begin by adding the source vertex to the queue, then enter a loop that continues as long as the queue is not empty. In each iteration, we remove a vertex from the queue and relax its outgoing edges. If relaxing an edge updates the distance to a neighbor, we add that to the queue if it's not already there.
+
+This queue based approach allows SPFA to focus on the parts of the graph where improvements are still possible, potentially speaking large portions of the graph that won't lead to better paths. This targeted processing often makes SPFA faster than Bellman-Ford in practice.
+
+## Floyd-Warshall Algorithm
+
+The Floyd-Warshall algorithm finds the shortest paths in a weighted graph with positive or negative edge weights, as long as there are no negative cycles. Unlike algorithms that compute shortest paths from a single source, Floyd-Warshall computes the shortest paths between all pairs of vertices in the graph
+
+This algorithm takes a fundamentally different approach by computing all-pairs shortest paths in one go, rather than seperately for each source. We start by initializing a distance matrix where direct connections between cities are filled with their edge weights, and all other distances are set to infinity. The distance from a city to itself is set to zero. This matrix serves both as our working space and our final result.

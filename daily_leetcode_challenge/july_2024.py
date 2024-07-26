@@ -734,3 +734,84 @@ class Solution:
 
         quick_sort(0, len(nums) - 1)
         return nums
+
+
+# https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/?envType=daily-question&envId=2024-07-26
+
+class Solution:
+    def findTheCity(
+        self, n: int, edges: List[List[int]], distanceThreshold: int
+    ) -> int:
+        # Adjacency list to store the graph
+        adj = [[] for _ in range(n)]
+        # Matrix to store shortest path distances from each city
+        spm = [[float("inf")] * n for _ in range(n)] # shortest_path_matrix
+        # Initialize adjacency list and shortest path matrix
+        for i in range(n):
+            spm[i][i] = 0  # Distance to itself is zero
+        # Populate the adjacency list with edges
+        for start, end, weight in edges:
+            adj[start].append((end, weight))
+            adj[end].append((start, weight))  # For undirected graph
+        # Compute shortest paths from each city using Dijkstra's algorithm
+        for i in range(n):
+            self.dijkstra(n, adj, spm[i], i)
+        # Find the city with the fewest number of reachable cities within the distance threshold
+        return self.get_city_with_fewest_reachable(
+            n, spm, distanceThreshold
+        )
+    # Dijkstra's algorithm to find shortest paths from a source city
+    def dijkstra(
+        self,
+        n: int,
+        adj: List[List[tuple]],
+        spd: List[int], # shortest_path_distances
+        source: int,
+    ):
+        # Priority queue to process nodes with the smallest distance first
+        priority_queue = [(0, source)]
+        spd[:] = [float("inf")] * n
+        spd[source] = 0  # Distance to itself is zero
+
+        # Process nodes in priority order
+        # cd = current_distance
+        # cc = current_city
+        # nc = neighbor_city
+        while priority_queue:
+            cd, cc = heapq.heappop(priority_queue)
+            if cd > spd[cc]:
+                continue
+
+            # Update distances to neighboring cities
+            for nc, edge_weight in adj[cc]:
+                if (spd[nc] > cd + edge_weight):
+                    spd[nc] = (
+                        cd + edge_weight
+                    )
+                    heapq.heappush(
+                        priority_queue,
+                        (spd[nc], nc),
+                    )
+
+    # Determine the city with the fewest number of reachable cities within the distance threshold
+    def get_city_with_fewest_reachable(
+        self,
+        n: int,
+        shortest_path_matrix: List[List[int]],
+        distance_threshold: int,
+    ) -> int:
+        city_with_fewest_reachable = -1
+        fewest_reachable_count = n
+
+        # Count number of cities reachable within the distance threshold for each city
+        for i in range(n):
+            reachable_count = sum(
+                1
+                for j in range(n)
+                if i != j and shortest_path_matrix[i][j] <= distance_threshold
+            )
+            # Update the city with the fewest reachable cities
+            if reachable_count <= fewest_reachable_count:
+                fewest_reachable_count = reachable_count
+                city_with_fewest_reachable = i
+        return city_with_fewest_reachable
