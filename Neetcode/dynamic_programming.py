@@ -1,6 +1,6 @@
 # Climbin Stairs
 class Solution:
-    def climbStairs(self, n: int) -> int:
+    def   Stairs(self, n: int) -> int:
         if n <= 3:
             return  n
         n1, n2 = 2, 3
