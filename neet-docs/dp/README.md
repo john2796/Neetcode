@@ -23,6 +23,11 @@
 - no memory need,use two variables the last two, shift variable
   - ![](images/7.png)
 
+<details>
+<summary>Solution</summary>
+<br>
+<!-- We need a space between the <br> and the content -->
+
 ```python
 class Solution:
     def climbStairs(self, n: int) -> int:
@@ -33,6 +38,8 @@ class Solution:
         two = temp
       return one
 ```
+
+</details>
 
 ## Min Cost Climbing Stairs
 
@@ -70,3 +77,47 @@ class Solution:
 ## House Robber
 
 ![](house-robber/1.png)
+
+- cannot rob neighbor next to each other
+
+### Brute force
+
+- ![](house-robber/2.png)
+
+## Subproblems
+
+- recurrence relationship
+  - ![](house-robber/3.png)
+  - rob house 1 or house 2
+    - ![](house-robber/4.png)
+  - maintain last two rob sum
+
+<details>
+<summary>Solution</summary>
+<br>
+<!-- We need a space between the <br> and the content -->
+
+![](house-robber/5.png)
+
+</details>
+
+## House Robber II
+
+![](house-robber-II/1.png)
+
+- we can't rob house in adjacent
+- first and last house is adjacent/connected
+- ![](house-robber-II/2.png)
+
+<details>
+<summary>Solution</summary>
+<br>
+<!-- We need a space between the <br> and the content -->
+
+![](house-robber-II/3.png)
+
+</details>
+
+## Longest Palindromic Substring
+
+![](longest-palindromic-substring/1.png)
