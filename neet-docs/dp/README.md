@@ -121,3 +121,16 @@ class Solution:
 ## Longest Palindromic Substring
 
 ![](longest-palindromic-substring/1.png)
+
+- palindrome write in reverse its the same string
+  - expand outwards
+  - ![](longest-palindromic-substring/2.png)
+
+<details>
+<summary>Solution</summary>
+<br>
+<!-- We need a space between the <br> and the content -->
+
+![](longest-palindromic-substring/3.png)
+
+</details>
