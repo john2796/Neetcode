@@ -128,3 +128,32 @@ class Solution:
                 if not seen[v] or len(seen[v]) == 1 and seen[v][0] != t:
                     seen[v].append(t)
                     heappush(pq, (t, v))
+                    
+# https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/description/?envType=daily-question&envId=2024-07-30
+"""
+The solution provided aims to find the minimum number of deletions required to make a given string s balanced. A string is considered balanced if there are no instances of 'a' appearing after 'b'.
+
+Explanation and Intuition
+Tracking Variables:
+
+bCount: This variable counts the number of 'b's encountered so far as we iterate through the string.
+minDeletions: This variable keeps track of the minimum deletions needed to balance the string up to the current character.
+Logic:
+
+As we iterate through the string, we encounter two types of characters: 'a' and 'b'.
+If we encounter an 'a', we have two choices:
+Either delete this 'a', which increases the minDeletions count by 1.
+Or, consider the number of 'b's we've seen so far (bCount), and assume we delete those 'b's to balance the string at this point.
+We choose the minimum of these two options (min(minDeletions + 1, bCount)) to ensure the least number of deletions.
+If we encounter a 'b', we simply increment bCount as it might be needed for comparison with future 'a's.
+"""
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        bCount = 0
+        minDeletions =0
+        for char in s:
+            if char == 'a':
+                minDeletions = min(minDeletions + 1, bCount)
+            else:
+                bCount += 1
+        return minDeletions
