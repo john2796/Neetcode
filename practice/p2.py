@@ -103,5 +103,55 @@ class Solution:
                 return [l + 1, r + 1]
         return []
 
-# Sliding Window
+# sliding window
+class Solution:
+    def maxProfit(self, p: List[int]) -> int:
+        buy = p[0]
+        profit = 0
+        for sell in p[1:]:
+            if sell > buy: # 1 > 7, 5>1, 3>5
+                profit = max(profit, sell - buy) # 5-1=4
+            else: # buy=1, buy=
+                buy = sell
+        return profit        
 
+        """
+             s  b
+            [7, 1, 5, 3, 6, 4]
+            | sell | buy  | profit|
+            |  1   |  7   |   0   |
+            |  5   |  1   |   4   |
+            |  3   |  1   |   2   |
+            |  6   |  1   |   5   | <-- answer
+            |  4   |  1   |   3   |
+
+                    """
+
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        longest = 0
+        l = 0
+        c = set()
+        for r in range(len(s)):
+            while s[r] in c:
+                c.remove(s[l])
+                l += 1
+            c.add(s[r])
+            longest = max(longest, r-l+1)
+        return longest
+    
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        c = collections.defaultdict()
+        l = 0
+        res = 0
+        for r in range(len(s)):
+            if s[r] not in c:
+                c[s[r]] = 1
+            else:
+                c[s[r]] += 1
+            res = max(res, c[s[r]])
+            if (r - l + 1) - res > k:
+                c[s[l]] -= 1
+                l += 1
+        return r - l + 1
