@@ -32,7 +32,7 @@ we'll determin the size of our sliding window by counting the number of 1s in th
 
 As we slide the window, we'll dynamically update our count of 1s by subtracting the value at the window's starting edge and adding the value at the window's new trailing edge. This step is crucial because it allows us to track the number of 1s in each potential group without re-scanning the entire window. The circular nature of the array is naturally handled because the sliding window can wrap around from the end to the beginning of the array.
 
-Finally, we'll find the difference between the total number of 1s in the array and the grouping with the highest concentration of 1s to find the minimum of swaps required to group the 1s.
+Finally, we'll find the difference between the total number of 1s in the array and the grouping with the highest concentration of 1s to find the minimum of swaps required to group the 1s. 
 
 """
 class Solution:
