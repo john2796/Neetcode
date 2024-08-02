@@ -1,6 +1,4 @@
 # Two-Pointer Approach
-
-
 """
 42. Trapping Rain Water
 Compute how much water it can trap after raining
@@ -48,4 +46,62 @@ class Solution:
             else:
                 r -= 1
         return max_area
+
+"""
+sort nums, two pointer + loop , check whether total == 0, check for dups value to skip
+"""
+class Solution:
+    def threeSum(self, n: List[int]) -> List[List[int]]:
+        n.sort()
+        res = []
+        for i in range(len(n) - 1):
+            if i > 0 and n[i] == n[i - 1]:  # skip dups i
+                continue
+            j = i + 1
+            k = len(n) - 1
+            while j < k:
+                total = n[i] + n[j] + n[k]
+                if total > 0:
+                    k -= 1
+                elif total < 0:
+                    j += 1
+                else:
+                    res.append([n[i], n[j], n[k]])
+                    j += 1  # move left pointer 1over
+
+                    while n[j] == n[j - 1] and j < k:
+                        j += 1  # also moved j if dups
+        return res
+
+# two pointer , move pointer when not isalnum() move both if same
+class Solution:
+    def isPalindrome(self, s: str) -> bool:
+        l, r = 0, len(s) - 1
+        while l < r:
+            if not s[l].isalnum():
+                l += 1
+            elif not s[r].isalnum():
+                r -= 1
+            elif s[l].lower() == s[r].lower():
+                l += 1
+                r -= 1
+            else:
+                return False
+        return True
+
+ # array is sorted , two-pointer 
+class Solution:
+    def twoSum(self, n: List[int], target: int) -> List[int]:
+        l, r = 0, len(n) - 1
+        while l < r:
+            t = n[r] + n[l]
+            if t < target:
+                l += 1
+            elif t > target:
+                r -= 1
+            else:
+                return [l + 1, r + 1]
+        return []
+
+# Sliding Window
 
