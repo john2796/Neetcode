@@ -26,9 +26,6 @@ class Solution:
                 rightMax = max(rightMax, h[r])
                 res += rightMax - h[r]
         return res
-
-
-
 """
 11. Container with most water
 return the maximum amount of water container can store.

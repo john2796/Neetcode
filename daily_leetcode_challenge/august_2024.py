@@ -72,3 +72,10 @@ class Solution:
             max_val_in_window = max(max_val_in_window, current_val_in_window)
         # Minimum swaps are the total `val` minus the maximum found in any window
         return total_val_count - max_val_in_window
+    
+# https://leetcode.com/problems/make-two-arrays-equal-by-reversing-subarrays/description/?envType=daily-question&envId=2024-08-03
+class Solution:
+    def canBeEqual(self, target: List[int], arr: List[int]) -> bool:
+        seen = Counter(arr)
+        t = Counter(target)
+        return seen == t
