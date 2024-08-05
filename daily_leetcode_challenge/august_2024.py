@@ -79,3 +79,21 @@ class Solution:
         seen = Counter(arr)
         t = Counter(target)
         return seen == t
+      
+      
+# https://leetcode.com/problems/kth-distinct-string-in-an-array/description/?envType=daily-question&envId=2024-08-05
+class Solution:
+    def kthDistinct(self, arr: List[str], k: int) -> str:
+        c = Counter(arr)
+        res = ""
+        for char, val in c.items():
+            if val >= 2:
+                continue
+            if val <= 1:
+                k -= 1
+            if k == 0:
+                res = char
+        if k > 0:
+            return ""
+        else:
+            return res
