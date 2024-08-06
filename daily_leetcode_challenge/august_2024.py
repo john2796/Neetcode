@@ -97,3 +97,41 @@ class Solution:
             return ""
         else:
             return res
+
+# https://leetcode.com/problems/minimum-number-of-pushes-to-type-word-ii/description/?envType=daily-question&envId=2024-08-06
+"""
+Approach 1: Greedy Sorting
+Intuition
+To solve this problem, we use a greedy algorithm approach combined with sorting. Keeping in mind that we have 8 keys available (2-9), the primary intuition is to remap the keys so the 8 most frequently occurring characters in the given string are assigned as first key presses, the next most common 8 characters as second key presses, and so on.
+
+We begin by counting the occurrences of each letter using a counter, which provides the frequency of each distinct letter. Next, we sort these frequencies in descending order.
+
+Since there are 8 possible key assignments, we'll divide the frequency rank by 8 to group it as a first, second, or third key press. Note that dividing the frequencies by 8 will result in 0, 1, and 2. We must add 1 to this group number to get the actual number of presses required for letters in that group. Multiplying this by the number of times the character appears in the given string yields the total number of presses for that letter.
+
+Finally, we will sum the total presses required to type the word.
+
+This greedy way, combined with sorting by frequency, ensures that each decision (assignment of letters to keys) is optimal for minimizing key presses.
+
+
+Understand Intuition:
+8 possible key assignments
+we'll divide the frequency rank by 8 to group it as a first, second, or third key press.
+We must add 1 to this group number to get the actual number of presses required for letters in that group.
+Multiplying this by the number of times the character appears in the given string yields the total number of presses for that letter.
+"""
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        # Frequency list to store count of each letter 
+        frequency = [0] * 26
+        # Count occurences of each letter
+        for c in word:
+            frequency[ord(c) - ord("a")] += 1
+        # Sort Frequencies in descending order
+        frequency.sort(reverse=True)
+        total_pushes = 0
+        # Calculate the number of presses
+        for i in range(26):
+            if frequency[i] == 0:
+                break
+            total_pushes += (i // 8 + 1) * frequency[i]
+        return total_pushes
