@@ -111,7 +111,6 @@ class Solution:
             else: # buy=1, buy=
                 buy = sell
         return profit        
-
         """
              s  b
             [7, 1, 5, 3, 6, 4]
@@ -123,7 +122,6 @@ class Solution:
             |  4   |  1   |   3   |
 
                     """
-
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         longest = 0
@@ -136,7 +134,6 @@ class Solution:
             c.add(s[r])
             longest = max(longest, r-l+1)
         return longest
-    
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
         c = collections.defaultdict()

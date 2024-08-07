@@ -79,6 +79,7 @@ class Solution:
         seen = Counter(arr)
         t = Counter(target)
         return seen == t
+<<<<<<< HEAD
       
       
 # https://leetcode.com/problems/kth-distinct-string-in-an-array/description/?envType=daily-question&envId=2024-08-05
@@ -161,3 +162,41 @@ class Solution:
         if num < 1000000000:
             return self._convert_to_words(num // 1000000) + " Million" + (" " + self._convert_to_words(num % 1000000) if num % 1000000 != 0 else "")
         return self._convert_to_words(num // 1000000000) + " Billion" + (" " + self._convert_to_words(num % 1000000000) if num % 1000000000 != 0 else "")
+=======
+    
+# https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/?envType=daily-question&envId=2024-08-04
+# binary search and sliding window
+"""
+Approach: Priority Queue
+Intuition:
+We can maintain the sorted order of subarray sums using a pq, which stores elements in a sorted order using a heap data structure. By inserting all the subarray sums into the pq, we ensure that the smallest sums are always easily accessible.
+
+Inserting all subarray sums into the pq results in the same time and space complexity as the previous approach, but it's possible to refine this strateg to optimize space complexity.
+
+In our first approach, we created an array to store all possible subarray sums. In this approach, we'll use the pq to store pairs. The first element of each pair will reperesent the sum of the current subarray and the second element will represent the end index of that subarray. We'll initialize the pq with pairs representing all one-sized subarrays
+
+As we process the queue, we repeatedly pop the smallest element, which represents the smallest subarray sum. However, this subarray could be part of a larger subarray. To account for this, we expand the subarray by one element (incrementing the end index), update its sum, and push the updated pair back into the pq.
+
+Once we have performed exactly left pop operations, we start accumulating the subarray sums. The process continues until we return the accumulated sum.
+"""
+class Solution:
+    import heapq
+    def rangeSum(self, nums, n, left, right):
+        pq = []
+        for i in range(n):
+            heapq.heappush(pq, (nums[i], i))
+        ans = 0
+        mod = 1e9 + 7
+        for i in range(1, right + 1):
+            p = heapq.heappop(pq)
+            # If the current index is greater than or equal to left, add the
+            # value to the answer.
+            if i >= left:
+                ans = (ans + p[0]) % mod
+            # If index is less than the last index, increment it and add its
+            # value to the first pair value.
+            if p[1] < n - 1:
+                p = (p[0] + nums[p[1] + 1], p[1] + 1)
+                heapq.heappush(pq, p)
+        return int(ans)
+>>>>>>> adc7e57 (rangeSum)
