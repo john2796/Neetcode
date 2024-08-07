@@ -79,9 +79,6 @@ class Solution:
         seen = Counter(arr)
         t = Counter(target)
         return seen == t
-<<<<<<< HEAD
-      
-      
 # https://leetcode.com/problems/kth-distinct-string-in-an-array/description/?envType=daily-question&envId=2024-08-05
 class Solution:
     def kthDistinct(self, arr: List[str], k: int) -> str:
@@ -136,8 +133,6 @@ class Solution:
                 break
             total_pushes += (i // 8 + 1) * frequency[i]
         return total_pushes
-
-
 # https://leetcode.com/problems/integer-to-english-words/?envType=daily-question&envId=2024-08-07
 # Recursive approach
 class Solution:
@@ -162,8 +157,6 @@ class Solution:
         if num < 1000000000:
             return self._convert_to_words(num // 1000000) + " Million" + (" " + self._convert_to_words(num % 1000000) if num % 1000000 != 0 else "")
         return self._convert_to_words(num // 1000000000) + " Billion" + (" " + self._convert_to_words(num % 1000000000) if num % 1000000000 != 0 else "")
-=======
-    
 # https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/?envType=daily-question&envId=2024-08-04
 # binary search and sliding window
 """
@@ -199,4 +192,3 @@ class Solution:
                 p = (p[0] + nums[p[1] + 1], p[1] + 1)
                 heapq.heappush(pq, p)
         return int(ans)
->>>>>>> adc7e57 (rangeSum)
