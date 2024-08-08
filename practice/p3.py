@@ -1,3 +1,8 @@
+
+from collections import deque
+import heapq
+from typing import Counter, List 
+
 # ---- Arrays & Hashing
 # contains duplicate
 class Solution:
@@ -723,8 +728,63 @@ class Solution:
             if q and q[0][1] == time:
                 heapq.heappush(maxHeap, q.popleft()[0])
         return time
-# design twitter
-# find median data stream
+# design twitter: use hash maps and heap to merge tweets from followed users, keeping track of the most recent tweets.
+class Twitter:
+  def __init__(self):
+    self.count = 0
+    self.tweetMap = defaultdict(list)
+    self.followMap = defaultdict(list)
+    
+  def postTweet(self, userId:int, tweetId:int) -> None:
+    self.tweetMap[userId].append([self.count, tweetId])
+    self.count -= 1
+    
+  def getNewsFeed(self, userId:int) -> List[int]:
+    res = []
+    minHeap = []
+    self.followMap[userId].add(userId)
+    for followeeId in self.followMap[userId]:
+      if followeeId in self.tweetMap:
+        index = len(self.tweetMap[followeeId]) - 1
+        count, tweetId = self.tweetMap[followeeId][index]
+        heapq.heappush(minHeap, [count, tweetId, followeeId, index - 1])
+    while minHeap and len(res) < 10:
+      count, tweetId, followeeId, index = heapq.heappop(minHeap)
+      res.append(tweetId)
+      if index >= 0:
+        count, tweetId = self.tweetMap[followeeId][index]
+        heapq.heappush(minHeap, [count, tweetId, followeeId, index - 1])
+    return res
+  
+  def follow(self,followerId:int, followeeId: int) -> None:
+    self.followMap[followerId].add(followeeId)
+  
+  def unfollow(self, followerId: int, followeeId:int) -> None:
+    self.followMap[followerId].remove(followeeId)
+
+# find median data stream: use two heaps (max-heap and min-heap) to balance the lower and upper halves of the data to find the median efficiently
+class MedianFinder:
+  def __init__(self):
+    self.small, self.large = [], []
+  
+  def addNum(self, num: int) -> None:
+    if self.large and num > self.large[0]:
+      heapq.heappush(self.large, num)
+    else:
+      heapq.heappush(self.small, -1 * num)
+    if len(self.small) > len(self.large) + 1:
+      val = -1 * heapq.heappop(self.small)
+      heapq.heappush(self.large, val)
+    if len(self.large) > len(self.small) + 1:
+      val = heapq.heappop(self.large)
+      heapq.heappush(self.small, -1 * val)
+      
+  def findMedian(self) -> float:
+    if len(self.small) > len(self.large):
+      return -1 * self.small[0]
+    elif len(self.large) > len(self.small):
+      return self.large[0]
+    return (-1 * self.small[0] + self.large[0]) / 2.0
 # ----- Backtracking
 # subsets
 class Solution:
@@ -1288,17 +1348,198 @@ def validTree(self, n, edges):
     return True
   return dfs(0, -1) and n == len(visit)
 # number of connected components in an undirected graph
-# redundant connection
-# word ladder
+class UnionFind:
+  def __init__(self):
+    self.f = {}
+  def findParent(self, x):
+    y = self.f.get(x,x)
+    if x != y:
+      y = self.f[x] = self.findParent(y)
+    return y
+  def union(self, x, y):
+    self.f[self.findParent(x)] = self.findParent(y)
 
+class Solution:
+  def countComponents(self, n:int, edges: List[List[int]]) -> int:
+    dsu = UnionFind()
+    for a, b in edges:
+      dsu.union(a, b)
+    return len(set(dsu.findParent(x) for x in range(n)))
+# redundant connection
+class Solution:
+  def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+    par = [i for i in range(len(edges) + 1)]
+    rank = [1] * (len(edges) + 1)
+    def find(n):
+      p = par[n]
+      while p != par[p]:
+        par[p] = par[par[p]]
+        p = par[p]
+      return p
+    def union(n1, n2):
+      p1, p2 = find(n1), find(n2)
+      if p1 == p2:
+        return False
+      if rank[p1] > rank[p2]:
+        par[p2] = p1
+        rank[p1] += rank[p2]
+      else:
+        par[p1] = p2
+        rank[p2] += rank[p1]
+      return True
+    for n1, n2 in edges:
+      if not union(n1, n2):
+        return [n1, n2]
+# word ladder
+def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+  if endWord not in wordList:
+    return 0
+  nei = collections.defaultdict(list)
+  wordList.append(beginWord)
+  for word in wordList:
+    for j in range(len(word)):
+      pattern = word[:j] + "*" + word[j + 1:]
+      nei[pattern].append(word)
+  visit = set([beginWord])
+  q = deque([beginWord])
+  res = 1
+  while q:
+    for i in range(len(q)):
+      word = q.popleft()
+      if word == endWord:
+        return res
+      for j in range(len(word)):
+        pattern = word[:j] + "*" + word[j + 1:]
+        for neiWord in nei[pattern]:
+          if neiWord not in visit:
+            visit.add(neiWord)
+            q.append(neiWord)
+    res += 1
+  return 0
 # ---- Advanced Graphs
 # reconstruct itinerary
+class Solution:
+  def findItinerary(self, tickets:List[List[str]]) -> List[str]:
+    graph = defaultdict(list)
+    for src, dst in sorted(tickets, reverse=True):
+      graph[src].append(dst)
+    itinerary = []
+    def dfs(airport):
+      while graph[airport]:
+        dfs(graph[airport].pop())
+      itinerary.append(airport)
+    dfs("JFK")
+    return itinerary[::-1]
 # min cost to connect all points
+class Solution:
+  def minCostConnectPoints(self, points: List[List[int]]) -> int:
+    N = len(points)
+    adj = {i: [] for i in range(N)}
+    for i in range(N):
+      x1, y1 = points[i]
+      for j in range(i + 1, N):
+        x2, y2 = points[j]
+        dist = abs(x1 - x2) + abs(y1 - y2)
+        adj[i].append([dist, j])
+        adj[i].append([dist, i])
+    # prims
+    res = 0
+    visit = set()
+    minH = [[0, 0]] # [cost, point]
+    while len(visit) < N:
+      cost, i = heapq.heappop(minH)
+      if i in visit:
+        continue
+      res += cost
+      visit.add(i)
+      for neiCost, nei in adj[i]:
+        if nei not in visit:
+          heapq.heappush(minH, [neiCost, nei])
+    return res
 # network delay time
+class Solution:
+  def networkDelayTime(self, times: List[List[int]], n: int, k:int) -> int:
+    # create adjacency list + prims (uses minheap, visited, add result explore neighbors if not in visit add to minHeap) 
+    edges = collections.defaultdict(list)
+    for u,v,w in times:
+      edges[u].append((v, w))
+    minHeap = [(0, k)]
+    visit = set()
+    t = 0
+    while minHeap:
+      w1, n1 = heapq.heappop(minHeap)
+      if n1 in visit:
+        continue
+      visit.add(n1)
+      t1 = w1
+      for n2, w2 in edges[n1]:
+        if n2 not in visit:
+          heapq.heappush(minHeap, (w1 + w2, n2))
+    return t if len(visit) == n else -1
 # swim in rising water
+class Solution:
+  def swimInWater(self, grid:List[List[int]]) -> int:
+    N = len(grid)
+    visit = set()
+    minH = [[grid[0][0], 0, 0]] # (time/max-height, r, c)
+    directions = [[0,1], [0,-1], [1,0], [-1, 0]]
+    visit.add((0, 0))
+    while minH:
+      t, r, c = heapq.heappop(minH)
+      if r == N - 1 and c == N - 1:
+        return t
+      for dr, dc in directions:
+        neiR, neiC = r + dr, c + dc
+        if (
+          neiR < 0
+          or neiC < 0
+          or neiR == N
+          or neiC == N
+          or (neiR, neiC) in visit
+        ):
+          continue
+        visit.add((neiR, neiC))
+        heapq.heappush(minH, [max(t, grid[neiR][neiC]), neiR, neiC])
+    return 0 # to get error line out
 # alien dictionary
+class Solution:
+  def alienOrder(self, words: List[str]) -> str:
+    adj = {char: set() for word in words for char in word}
+    for i in range(len(words) - 1):
+      w1, w2 = words[i], words[i + 1]
+      minLen = min(len(w1), words[i + 1])
+      if len(w1) > len(w2) and w1[:minLen] == w2[:minLen]:
+        return ""
+      for j in range(minLen):
+        if w1[j] != w2[j]:
+          adj[w1[j]].add(w2[j])
+          break
+    visited = {}
+    res = []
+    def dfs(char):
+      if char in visited:
+        return visited[char]
+      visited[char] = False
+      res.append(char)
+    for char in adj:
+      if dfs(char):
+        return ""
+    res.reverse()
+    return "".join(res)
 # cheapest flights within k stops
-
+class Solution:
+  def findCheapestPrice(self,n:int,flights:List[List[int]], src:int, dst:int,k:int) -> int:
+    prices = [float("inf")] * n
+    prices[src] = 0
+    for i in range(k + 1):
+      tmpPrices = prices.copy()
+      for s,d,p in flights: # s=source, d=dest, p=price
+        if prices[s] == float("inf"):
+          continue
+        if prices[s] + p < tmpPrices[d]:
+          tmpPrices[d] = prices[s] + p
+      prices = tmpPrices
+    return -1 if prices[dst] == float("inf") else prices[dst]
 # ---- 1-D DP
 # climbing stairs
 def stairs(self, n: int) -> int:

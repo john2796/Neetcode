@@ -137,6 +137,7 @@ class Solution:
                     continue
                 visit.add((neiR, neiC))
                 heapq.heappush(minH, [max(t, grid[neiR][neiC]), neiR, neiC])
+        return 0
 
 # Alien Dictionary
 class Solution:
