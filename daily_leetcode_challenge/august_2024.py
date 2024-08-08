@@ -192,3 +192,26 @@ class Solution:
                 p = (p[0] + nums[p[1] + 1], p[1] + 1)
                 heapq.heappush(pq, p)
         return int(ans)
+      
+# https://leetcode.com/problems/spiral-matrix-iii/?envType=daily-question&envId=2024-08-08
+class Solution:
+    def spiralMatrixIII(self, rows: int, cols: int, rStart: int, cStart: int) -> List[List[int]]:
+        dir = [[0,1], [1,0], [0, -1], [-1, 0]]
+        traversed = []
+        step = 1
+        direction = 0
+        while len(traversed) < rows * cols:
+            for _ in range(2):
+                for _ in range(step):
+                    if (
+                        rStart >= 0
+                        and rStart < rows
+                        and cStart >= 0
+                        and cStart < cols
+                    ):
+                        traversed.append([rStart, cStart])
+                    rStart += dir[direction][0]
+                    cStart += dir[direction][1]
+                direction = (direction + 1) % 4
+            step += 1
+        return traversed
