@@ -349,7 +349,6 @@ class Solution:
 class Solution:
     def numDistinct(self, s: str, t: str) -> int:
         cache = {}
-
         for i in range(len(s) + 1):
             cache[(i, len(t))] = 1
         for j in range(len(t)):

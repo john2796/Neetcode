@@ -1684,22 +1684,231 @@ class Solution:
                 if nums[i] < nums[j]:
                     LIS[i] = max(LIS[i], 1 + LIS[j])
         return max(LIS)
-# partition equal subset sum
-
+# partition equal subset sum: Use DP to determine if the array can be partitioned into two subsets with equal sums.
+class Solution:
+  def canPartition(self, nums: List[int]) -> bool:
+    if sum(nums) % 2:
+      return False
+    dp = set()
+    dp.add(0)
+    target = sum(nums) // 2
+    for i in range(len(nums) -1, -1, -1):
+      nextDP = set()
+      for t in dp:
+        if (t + nums[i]) == target:
+          return True
+        nextDP.add(t + nums[i])
+        nextDP.add(t)
+      dp = nextDP
+    return False
 # ---- 2-D DP
-# unique paths
-# longest common subsequence
-# best time to buy and sell stock with cooldown
-# coin change II
-# target sum
-# interleaving string
-# longest increasing path in a matrix
-# distinct subsequences
-# edit distance
-# burst balloons
-# regular expression matching
+# unique paths: use DP to calculate the number of ways to reach each cell by summing the ways from the top and left cells.
+class Solution:
+  def uniquePaths(self, m:int, n:int) -> int:
+    row = [1] * n
+    for i in range(m - 1):
+      newRow = [1] * n
+      for j in range(n - 2, -1, -1):
+        newRow[j] = newRow[j + 1] + row[j]
+      row = newRow
+    return row[0] # O(n * m) O(n)
+# longest common subsequence: Use DP to compare two strings and build the longest subsequence common to both
+class Solution:
+  def longestCommonSubsequence(self, text1:str, text2:str) -> int:
+    dp = [[0 for j in range(len(text2) + 1)] for i in range(len(text1) + 1)]
+    for i in range(len(text1) -1, -1, -1):
+      for j in range(len(text2) -1, -1, -1):
+        if text1[i] == text2[j]:
+          dp[i][j] = 1 + dp[i + 1][j + 1]
+        else:
+          dp[i][j] = max(dp[i][j +1], dp[i + 1][j])
+    return dp[0][0]
+# best time to buy and sell stock with cooldown: Use dp to maximize profit while considering the cooldown period after selling
+class Solution:
+  def maxProfit(self, prices: List[int]) -> int:
+    dp = {}
+    def dfs(i, buying):
+      if i >= len(prices):
+        return 0
+      if (i, buying) in dp:
+        return dp[(i, buying)]
+      cooldown = dfs(i + 1, buying)
+      if buying:
+        buy = dfs(i + 1, not buying) - prices[i]
+        dp[(i, buying)] = max(buy, cooldown)
+      else:
+        sell = dfs(i + 2, not buying) - prices[i]
+        dp[(i, buying)] = max(sell, cooldown)
+      return dp[(i, buying)]
+    return dfs(0, True)
+# coin change II: Use DP to count the number of ways to make the amount with the given coins, considering combinations
+class Solution:
+  def change_memo(self, amount:int, coins:List[int]) -> int:
+    cache = {}
+    def dfs(i, a):
+      if a == amount:
+        return 1
+      if a > amount:
+        return 0
+      if i == len(coins):
+        return 0
+      if (i, a) in cache:
+        return cache[(i, a)]
+      cache[(i, a)] = dfs(i, a + coins[i]) + dfs(i + 1)
+      return cache[(i, a)]
+    return dfs(0, 0)
+  
+  def change_dp1(self, amount: int, coins: List[int]) -> int:
+      dp = [[0] * (len(coins) + 1) for i in range(amount + 1)]
+      dp[0] = [1] * (len(coins) + 1)
+      for a in range(1, amount + 1):
+          for i in range(len(coins) -1, -1, -1):
+              dp[a][i] = dp[a][i + 1]
+              if a - coins[i] >= 0:
+                  dp[a][i] += dp[a - coins[i]][i]
+      return dp[amount][0]
 
+  def change_dp2(self, amount:int, coins:List[int]) -> int:
+    dp = [0] * (amount + 1)
+    dp[0] = 1
+    for i in range(len(coins) -1, -1, -1):
+      nextDP = [0] * (amount + 1)
+      nextDP[0] = 1
+      for a in range(1, amount + 1):
+        nextDP[a] = dp[a]
+        if a - coins[i] >= 0:
+          nextDP[a] += nextDP[a - coins[i]]
+      dp = nextDP
+    return dp[amount]
+# target sum: Use DP to calculate the number of ways to assign symbols to make the sum equal to the target.
+class Solution:
+  def findTargetSumWays(self, nums:List[int], target:int) -> int:
+    dp = {} # (index, total) -> # of ways
+    def backtrack(i, total):
+      if i == len(nums):
+        return 1 if total == target else 0
+      if (i, total) in dp:
+        return dp[(i, total)]
+      dp[(i, total)] = backtrack(i + 1, total + nums[i]) + backtrack(i + 1, total - nums[i])
+      return dp[(i, total)]
+    return backtrack(0, 0)
+# interleaving string: Use DP to check if the third string is an interleaving of the other two by maintaining a 2D table.
+class Solution:
+  def isInterleave(self, s1:str, s2:str, s3:str) -> bool:
+    if len(s1) + len(s2) != len(s3):
+      return False
+    dp = [[False] * (len(s2 + 1) for i in range(len(s1) + 1))]
+    dp[len(s1)][len(s2)] = True
+    for i in range(len(s1), -1, -1):
+      for j in range(len(s2), -1, -1):
+        if i < len(s1) and s1[i] == s3[i + j] and dp[i + 1][j]:
+          dp[i][j] = True
+        if j < len(s2) and s2[j] == s3[i + j] and dp[i][j + 1]:
+          dp[i][j] = True
+    return dp[0][0]
+# longest increasing path in a matrix: Use DP with memoization to find the longest increasing path in the matrix by exploring all directions.
+class Solution:
+  def longestIncreasingPath(self, matrix:List[List[int]]) -> int:
+    rows, cols = len(matrix), len(matrix[0])
+    dp = {} # (r, c) -> LIP
+    def dfs(r, c, prevVal):
+      if r < 0 or r == rows or c < 0 or c == cols or matrix[r][c] <= prevVal:
+        return 0
+      if (r, c) in dp:
+        return dp[(r, c)]
+      res = 1
+      res = max(res, 1 + dfs(r + 1, c, matrix[r][c]))
+      res = max(res, 1 + dfs(r -1, c, matrix[r][c]))
+      res = max(res, 1 + dfs(r, c + 1, matrix[r][c]))
+      res = max(res, 1 + dfs(r, c - 1, matrix[r][c]))
+      dp[(r, c)] = res
+      return res
+    for r in range(rows):
+      for c in range(cols):
+        dfs(r, c, -1)
+    return max(dp.values())
+# distinct subsequences: Use DP to count the number of distinct subsequences of one string that equals the other string.
+class Solution:
+  def numDistinct(self, s:str, t:str) -> int:
+    cache = {}
+    for i in range(len(s) + 1):
+      cache[(i, len(t))] = 1
+    for j in range(len(t)):
+      cache[(len(s), j)] = 0
+    for j in range(len(s) -1, -1, -1):
+      for j in range(len(t) -1, -1, -1):
+        if s[i] == t[j]:
+          cache[(i, j)] = cache[(i + j, j + 1)] + cache[(i + 1, j)]
+        else:
+          cache[(i, j)] = cache[(i + 1, j)]
+    return cache[(0, 0)]
+# edit distance: Use DP to calculate the minimum number of operations required to convert one string into another.
+class Solution:
+  def minDistance(self, word1: str, word2: str) -> int:
+    dp = [[float("inf")] * (len(word2) + 1) for i in range(len(word1) + 1)]
+    for j in range(len(word2) + 1):
+      dp[len(word1)][j] = len(word2) - j
+    for i in range(len(word1) + 1):
+      dp[i][len(word2)] = len(word1) - 1
+    for i in range(len(word1) -1, -1, -1):
+      for j in range(len(word2) -1, -1, -1):
+        if word1[i] == word2[j]:
+          dp[i][j] = dp[i + 1][j + 1]
+        else:
+          dp[i][j] = 1 + min(dp[i + 1][j], dp[i][j + 1], dp[i + 1][j + 1])
+    return dp[0][0]
+# burst balloons: Use DP to calculate the maximum coins that can be obtained by strategically bursting balloons. 
+class Solution:
+  def maxCoins(self, nums: List[int]) -> int:
+    cache = {}
+    nums = [1] + nums + [1]
+    for offset in range(2, len(nums)):
+      for left in range(len(nums) - offset):
+        right = left + offset
+        for pivot in range(left + 1, right):
+          coins = nums[left] * nums[pivot] * nums[right]
+          coins += cache.get((left,pivot), 0) + cache.get((pivot, right), 0)
+          cache[(left, right)] = max(coins, cache.get((left, right), 0))
+    return cache.get((0, len(nums) -1), 0)
+# regular expression matching: Use DP to match a string against a pattern that includes '.' and '\*' as wildcards. bottom-up dp
+class Solution:
+  # Bottom up
+  def isMatch(self, s:str, p:str) -> bool:
+    cache = [[False] * (len(p) + 1) for i in range(len(s) + 1)] 
+    cache[len(s)][len(p)] = True
+    for i in range(len(s), -1, -1):
+      for j in range(len(p) -1, -1, -1):
+        match = i < len(s) and (s[i] == p[j] or p[j] == ".")
+        if (j + 1) < len(p) and p[j + 1] == "*":
+          cache[i][j] = cache[i][j + 2]
+          if match:
+            cache[i][j] = cache[i + 1][j] or cache[i][j]
+        elif match:
+          cache[i][j] = cache[i + 1][j + 1]
+    return cache[0][0]
+  # Top Down
+  def isMatch_topdown(self, s:str, p:str) -> bool:
+    cache = {}
+    def dfs(i, j):
+      if (i, j) in cache:
+        return cache[(i, j)]
+      if i >= len(s) and j >= len(p):
+        return True
+      if j >= len(p):
+        return False
+      match = i < len(s) and (s[i] == p[j] or p[j] == ".")
+      if (j + 1) < len(p) and p[j + 1] == "*":
+        cache[(i, j)] = dfs(i, j + 2) or (match and dfs(i + 1, j))
+        return cache
+      if match:
+        cache[(i, j)] = dfs(i + 1, j + 1)
+        return cache[(i, j)]
+      cache[(i, j)] = False
+      return False
+    return dfs(0, 0)
+  
 # ---- Greedy
+<<<<<<< HEAD
 # Maximum subbaray: Use a greedy approach (Kadane's algorithm) to find the subarray with the maximum sum.
 class Solution:
     def maxSubarray(self, nums: List[int]) -> int:
@@ -1800,6 +2009,17 @@ class Solution:
             return dp[(i, left)]
         return dfs(0, 0)
     
+=======
+# Maximum subbaray: use greedy approach (Kadan'es algorithm) to find the subarray with the maximum sum.
+# jump game: use a greedy approach to keep track of the farthest position you can reach and see if you can reach the end.
+# jump game II: Use a greedy approach to minimize the number of jumps needed to reach th end by always jumping to the farthest reachable position.
+# gas station: Use greedy approach to find the starting point where you can complete the circuit by checking if the total gas is sufficient.
+# hand of straights: Use a greedy approach with a frequency map to form hands by consecutively grouping cards.
+# merge triplets to form target triplet: Use a greedy
+# partition labels
+# valid parenthesis string
+
+>>>>>>> 33a443b (Manual Scan)
 # ---- Intervals
 # insert interval: Use a greedy approach to merge the new interval into the existing list, adjusting overlaps.
 class Solution:
