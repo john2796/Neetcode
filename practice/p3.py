@@ -1700,22 +1700,183 @@ class Solution:
 # regular expression matching
 
 # ---- Greedy
-# Maximum subbaray
-# jump game
-# jump game II
-# gas station
-# hand of straights
-# merge triplets to form target triplet
-# partition labels
-# valid parenthesis string
-
+# Maximum subbaray: Use a greedy approach (Kadane's algorithm) to find the subarray with the maximum sum.
+class Solution:
+    def maxSubarray(self, nums: List[int]) -> int:
+        res = nums[0]
+        total = 0
+        for n in nums:
+            total += n
+            res = max(res, total)
+            if total < 0:
+                total = 0
+        return res
+# jump game: Use a greedy approach to keep track of the farthest position
+class Solution:
+    def canJump(self, nums:List[int]) -> bool:
+        goal = len(nums) - 1
+        for i in range(len(nums) -2, -1, -1):
+            if 1 + nums[i] >= goal:
+                goal = i
+        return goal == 0
+# jump game II: Use a greedy approach to minimize the number of jumps needed to reach the end by always jumping to the farthest reachable position.
+class Solution:
+    def jumpII(self, nums:List[int]) -> int:
+        l, r = 0, 0
+        res = 0
+        while r < (len(nums) - 1):
+            maxJump = 0
+            for i in range(l, r + 1):
+                maxJump = max(maxJump, i + nums[i])
+            l = r + 1
+            r = maxJump
+            res += 1
+        return res
+# gas station: Use a greedy approach to find the starting point where you can complete the circuit by checking if the total gas is sufficient.
+class Solution:
+    def canCompleteCircuit(self, gas: List[int], cost:List[int]) -> int:
+        start, end = len(gas) - 1, 0
+        total = gas[start] - cost[start]
+        while start >= end:
+            while total > 0 and start >= end:
+                start -= 1
+                total += gas[start] - cost[start]
+            if start == end:
+                return start
+            total += gas[end] - cost[end]
+            end += 1
+        return -1
+# hand of straights: Use a greedy approach with a frequency map to form hands by consecutively grouping cards.
+class Solution:
+    def isNSStraightHand(self, hand:List[int], groupSize:int) -> bool:
+        if len(hand) % groupSize:
+            return False
+        count = {}
+        for n in hand:
+            count[n] = 1 + count.get(n, 0)
+        minH = list(count.keys())
+        heapq.heapify(minH)
+        while minH:
+            first = minH[0]
+            for i in range(first, first + groupSize):
+                if i not in count:
+                    return False
+                count[i] -= 1
+                if count[i] == 0:
+                    if i != minH[0]:
+                        return False
+                    heapq.heappop(minH)
+        return True
+# merge triplets to form target triplet: Use a greedy approach to check if the target can be formed by merging valid triplets.
+# partition labels: Use a greedy approach to partition the string such that each letter appreas in at most one part, based on its last occurrence.
+class Solution:
+    def mergeTriplets(self, triplets: List[List[int]], target:List[int]) -> bool:
+        good = set()
+        for t in triplets:
+            if t[0] > target[0] or t[1] > target[1] or t[2] > target[2]:
+                continue
+            for i,v in enumerate(t):
+                if v == target[i]:
+                    good.add(i)
+        return len(good) == 3
+# valid parenthesis string: Use a greedy approach to ensure the string can be balanced by tracking the possible number of open parentheses.
+class Solution:
+    def checkValidString(self, s:str) -> bool:
+        dp = {(len(s), 0): True} # key=(i, leftCount) -> isValid
+        def dfs(i, left):
+            if i == len(s) or left < 0:
+                return left == 0
+            if (i, left) in dp:
+                return dp[(i, left)]
+            if s[i] == "(":
+                dp[(i, left)] = dfs(i + 1, left + 1)
+            elif s[i] == ")":
+                dp[(i, left)] = dfs(i + 1, left - 1)
+            else:
+                dp[(i, left)] = (
+                    dfs(i + 1, left + 1) or fs(i + 1, left - 1) or 
+                    dfs(i + 1, left)
+                )
+            return dp[(i, left)]
+        return dfs(0, 0)
+    
 # ---- Intervals
-# insert interval
-# merge intervals
-# non overlapping intervals
-# meeting rooms
-# meeting rooms II
-# minimum interval to include each query
+# insert interval: Use a greedy approach to merge the new interval into the existing list, adjusting overlaps.
+class Solution:
+    def insert(
+        self, intervals:List[List[int]], newInterval:List[int]
+    ) -> List[List[int]]:
+        res = []
+        for i in range(len(intervals)):
+            if newInterval[1] < intervals[i][0]:
+                res.append(newInterval)
+                return res + intervals[i:]
+            elif newInterval[0] > intervals[i][1]:
+                res.append(intervals[i])
+            else:
+                newInterval = [
+                    max(newInterval[0], intervals[i][0]),
+                    max(newInterval[1], intervals[i][1])
+                ]
+        res.append(newInterval)
+        return res
+# merge intervals: Sort intervals by start time, then merge overlapping intervals by comparing end times.
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        intervals.sort(key=lambda x:x[0])
+        merged = [intervals[0]]
+        for current in intervals[1:]:
+            last = merged[-1]
+            if current[0] <= last[1]:
+                last[1] = max(last[1], current[1])
+            else:
+                merged.append(current)
+        return merged
+# non overlapping intervals: Use a greedy approach to remove the minimum number of intervals to avoid overlap, prioritizing intervals that end the earliest.
+class Solution:
+    def eraseOverlappingIntervals(self, intervals: List[List[int]]) -> int:
+        intervals.sort(key=lambda x:x[1])
+        count = 0
+        end = float("-inf")
+        for start, stop in intervals:
+            if start >= end:
+                end = stop
+            else:
+                count += 1
+        return count
+# meeting rooms: Sort the intervals by start time and check for overlaps to determine if all meetings can be attended.
+class Solution:
+    def canAttendMeetings(self, intervals):
+        intervals.sort(key=lambda x:[x])
+        for i in range(1, len(intervals)):
+            if intervals[i][0] < intervals[i-1][1]:
+                return False
+        return True
+# meeting rooms II: Use a min-heap to track the end times of meetings and determine the minimum of rooms required.
+def minMeetingRooms(self, intervals:List[List[int]]) -> int:
+    intervals.sort(key=lambda x:x[0])
+    heap = []
+    for interval in intervals:
+        if heap and heap[0] <= interval[0]:
+            heapq.heappop(heap)
+        heap.heappush(heap, interval[1])
+    return len(heap)
+# minimum interval to include each query: Use a combination of sorting and a priority queue to find the smallest interval containing each query.
+class Solution:
+    def minInterval(self, intervals:List[List[int]], queries:List[int]) -> List[int]:
+        intervals.sort()
+        minHeap = []
+        res = {}
+        i = 0
+        for q in sorted(queries):
+            while i < len(intervals) and intervals[i][0] <= q:
+                l, r = intervals[i]
+                heapq.heappush(minHeap, (r - l + 1, r))
+                i += 1
+            while minHeap and minHeap[0][1] < q:
+                heapq.heappop(minHeap)
+            res[q] = minHeap[0][0] if minHeap else -1
+        return [res[q] for q in queries]
 
 # ---- Math & Geometry
 # rotate image
