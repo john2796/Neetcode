@@ -1,3 +1,5 @@
+# Set Goal -> Make a plan -> Take Action
+
 Learning from a LeetCode solution involves several steps to ensure you
 understand the problem-solving approach, the logic behind the solution, and how
 you can apply similar techniques to other problems. Here's a structured approach
