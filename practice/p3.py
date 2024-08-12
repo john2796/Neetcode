@@ -14,24 +14,204 @@ class Solution:
             else:
                 s[n] = n
         return False
-
-
 # valid anagram
+class Solution:
+  def isAnagram(self, s:str, t:str) -> bool:
+    sCount, tCount = {}, {}
+    for char in s:
+      if char in sCount:
+        sCount[char] += 1
+      else:
+        sCount[char] = 1
+    for char in t:
+      if char in tCount:
+        tCount[char] += 1
+      else:
+        tCount[char] = 1
+    return sCount == tCount
 # two sum
+class Solution:
+  def twoSum(self, nums:List[int], target: int) -> List[int]:
+    hashset = {}
+    for i, n in enumerate(nums):
+      t = target - n
+      if t in hashset:
+        return [hashset[t], i]
+      else:
+        hashset[n] = i
+    return []
 # group anagram
+class Solution:
+  def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+    ans = collections.defaultdict(list)
+    for s in strs:
+      count = [0] * 26
+      for c in s:
+        count[ord(c) - ord("a")] += 1
+      ans[tuple(count)].append(s)
+    return ans.values()
 # top k frequent elements
+class Solution:
+  def topKFrequent(self, nums:List[int], k:int) -> List[int]:
+    count = {}
+    freq = [[] for i in range(len(nums) + 1)]
+    for n in nums:
+      count[n] = 1 + count.get(n, 0)
+    for n, c in count.items():
+      freq[c].append(n)
+    res = []
+    for i in range(len(freq) -1, 0, -1):
+      for n in freq[i]:
+        res.append(n)
+        if len(res) == k:
+          return res
+    return []
 # encode and decode strings
+class Solution:
+  def encode(self, strs):
+    res = ""
+    for s in strs:
+      res += str(len(s)) + "#" + s
+    return res
+  def decode(self, s):
+    res = []
+    i = 0
+    while i < len(s):
+        j = i
+        while s[j] != '#':
+            j += 1
+        length = int(s[i:j])
+        i = j + 1
+        j = i + length
+        res.append(s[i:j])
+        i = j
+        
+    return res
 # product of array except self
+def productExceptSelf(nums):
+  res = [1] * (len(nums))
+  for i in range(1, len(nums)):
+    res[i] = nums[i - 1] * res[i - 1]
+  postfix = 1
+  for i in range(len(nums) -1, -1, -1):
+    res[i] *= postfix
+    postfix *= nums[i]
+  return res
 # valid sudoku
+class Solution:
+  def isValidSudoku(self, board:List[List[int]]) -> bool:
+    row = collections.defaultdict(set)
+    col = collections.defaultdict(set)
+    square = collections.defaultdict(set)
+    for r in range(9):
+      for c in range(9):
+        if (board[r][c] == "."):
+          continue
+        if (
+          board[r][c] in row[r]
+          or board[r][c] in col[c]
+          or board[r][c] in square[(r // 3, c // 3)]
+        ):
+          return False
+        row[r].add(board[r][c])
+        col[c].add(board[r][c])
+        square[(r // 3, c // 3)].add(board[r][c])
+    return True
 # longest consecutive sequence
-
+class Solution:
+  def longestConsecutive(self, nums: List[int]):
+    numSet = set(nums)
+    longest = 0
+    for n in numSet:
+      if (n - 1) not in numSet:
+        length = 1
+        while (n + length) in numSet:
+          length += 1
+        longest = max(length, longest)
+      return longest
+    
 # ---- Two Pointers
 # valid palindrome
+class Solution:
+  def isPalindrome(self, s:str) -> bool:
+    l, r = 0, len(s) - 1
+    while l < r:
+      if not s[l].isalnum():
+        l += 1
+      elif not s[r].isalnum():
+        r -= 1
+      elif s[l].lower() == s[r].lower():
+        l += 1
+        r -= 1
+      else:
+        return False
+    return True
 # two sum II input array is sorted
+class Solution:
+  def twoSum(self, numbers: List[int], target: int):
+    l, r = 0, len(numbers) - 1
+    while l < r:
+      s = numbers[r] + numbers[l]
+      if target == s:
+        return [l + 1, r + 1]
+      elif s < target:
+        l += 1
+      else:
+        r -= 1
 # 3sum
+class Solution:
+  def threeSum(self, nums: List[int]) -> List[List[int]]:
+    nums.sort()
+    res = []
+    for i in range(len(nums) - 1):
+      if i > 0 and nums[i] == nums[i - 1]:
+        continue
+      j = i + 1
+      k = len(nums) - 1
+      while j < k:
+        total = nums[i] + nums[j] + nums[k]
+        if total > 0:
+          k -= 1
+        elif total < 0:
+          j += 1
+        else:
+          res.append([nums[i], nums[j], nums[k]])
+          j += 1
+          while nums[j] == nums[j - 1] and j < k:
+            j += 1
+    return res
 # container with most water
+class Solution:
+  def maxArea(self, height: List[int]) -> int:
+    l, r = 0, len(height) - 1
+    max_area = 0
+    while l < r:
+      current_area = min(height[l], height[r]) * (r - l)
+      max_area = max(max_area, current_area)
+      if height[l] < height[r]:
+        l += 1
+      else:
+        r -= 1
+    return max_area
 # trapping rain water
-
+class Solution:
+  def trap(self, height:List[int]) -> int:
+    i = 0
+    left_max = height[0]
+    sum = 0
+    j = len(height) - 1
+    right_max = height[j]
+    while i < j:
+      if left_max <= right_max:
+        sum += left_max - height[i]
+        i += 1
+        left_max = max(left_max, height[i])
+      else:
+        sum += right_max - height[j]
+        j -= 1
+        right_max = max(right_max, height[j])
+    return sum
+  
 # ---- Sliding Window
 # best time to buy and sell stock
 # longest substring without repeating characters
@@ -1908,7 +2088,6 @@ class Solution:
     return dfs(0, 0)
   
 # ---- Greedy
-<<<<<<< HEAD
 # Maximum subbaray: Use a greedy approach (Kadane's algorithm) to find the subarray with the maximum sum.
 class Solution:
     def maxSubarray(self, nums: List[int]) -> int:
@@ -2009,17 +2188,6 @@ class Solution:
             return dp[(i, left)]
         return dfs(0, 0)
     
-=======
-# Maximum subbaray: use greedy approach (Kadan'es algorithm) to find the subarray with the maximum sum.
-# jump game: use a greedy approach to keep track of the farthest position you can reach and see if you can reach the end.
-# jump game II: Use a greedy approach to minimize the number of jumps needed to reach th end by always jumping to the farthest reachable position.
-# gas station: Use greedy approach to find the starting point where you can complete the circuit by checking if the total gas is sufficient.
-# hand of straights: Use a greedy approach with a frequency map to form hands by consecutively grouping cards.
-# merge triplets to form target triplet: Use a greedy
-# partition labels
-# valid parenthesis string
-
->>>>>>> 33a443b (Manual Scan)
 # ---- Intervals
 # insert interval: Use a greedy approach to merge the new interval into the existing list, adjusting overlaps.
 class Solution:
