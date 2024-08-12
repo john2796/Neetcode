@@ -343,3 +343,60 @@ class Solution:
             and col < n
             and expanded_grid[row][col] == 0
         )
+        
+# https://leetcode.com/problems/minimum-number-of-days-to-disconnect-island/?envType=daily-question&envId=2024-08-11
+class Solution:
+    def minDays(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        def _count_islands():
+            visited = set()
+            count = 0
+            for i in range(rows):
+                for j in range(cols):
+                    if grid[i][j] == 1 and (i, j) not in visited:
+                        _explore_island(i, j, visited)
+                        count += 1
+            return count
+        def _explore_island(i, j, visited):
+            if (
+                i < 0
+                or i >= rows
+                or j < 0
+                or j >= cols
+                or grid[i][j] == 0
+                or (i, j) in visited
+            ):
+                return
+            visited.add((i, j))
+            for di, dj in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+                _explore_island(i + di, j + dj, visited)
+        # Check if already disconnected
+        if _count_islands() != 1:
+            return 0
+        # Check if can be disconnected in 1 day
+        for i in range(rows):
+            for j in range(cols):
+                if grid[i][j] == 1:
+                    grid[i][j] = 0
+                    if _count_islands() != 1:
+                        return 1
+                    grid[i][j] = 1
+        # If can't be disconnected in 0 or 1 day, return 2
+        return 2
+
+# https://leetcode.com/problems/kth-largest-element-in-a-stream/?envType=daily-question&envId=2024-08-12
+# heap priority queue
+class KthLargest:
+    def __init__(self, k: int, nums: List[int]):
+        self.minHeap, self.k = nums, k
+        heapq.heapify(self.minHeap)
+        while len(self.minHeap) > k:
+            heapq.heappop(self.minHeap)
+    def add(self, val: int) -> int:
+        heapq.heappush(self.minHeap, val)
+        if len(self.minHeap) > self.k:
+            heapq.heappop(self.minHeap)
+        return self.minHeap[0]
+# Your KthLargest object will be instantiated and called as such:
+# obj = KthLargest(k, nums)
+# param_1 = obj.add(val)
